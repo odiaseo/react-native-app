@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
-import {StyleSheet, FlatList, View} from 'react-native';
+import {StyleSheet, FlatList, View, StatusBar} from 'react-native';
 import CouponItem from '../components/CouponItem';
-import TopBar from '../components/TopBar';
+import HomeTopBar from '../components/home/HomeTopBar';
+import Carousel from '../components/home/Carousel';
 import TabBar from '../components/TabBar';
-import TokenHelper from '../common/TokenHelper';
-
+import ApiHelper from '../common/ApiHelper';
 
 export default class Home extends Component {
 
-    defaultEndpoint = 'https://api.kuponhub.net/api/v1/voucher?sort=+is_expired,-popularity&per_page=20';
+    defaultEndpoint = '/voucher?sort=+is_expired,-popularity&per_page=20';
+
+    static navigationOptions = {
+        title: 'Home',
+        header: null
+    };
 
     constructor(props) {
         super(props);
@@ -22,19 +27,6 @@ export default class Home extends Component {
 
         this._renderCoupons = this._renderCoupons.bind(this);
         this._getCoupons = this._getCoupons.bind(this);
-        this._doSearch = this._doSearch.bind(this);
-
-    }
-
-
-    _doSearch(searchTerm, page: 1) {
-        if (searchTerm.length > 1) {
-            this.setState({
-                page: page,
-                endpoint: 'https://api.kuponhub.net/api/v1/search/voucher?per_page=20&keyword=' + searchTerm
-            });
-            this._getCoupons();
-        }
     }
 
     _getCoupons() {
@@ -42,27 +34,12 @@ export default class Home extends Component {
         this.setState({
             isRefreshing: true
         });
-        return fetch(
-            endPoint,
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + this.state.accessToken,
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then((response) => {
-                return response.json();
-            })
-            .then((responseJson) => this.setState({coupons: responseJson, isRefreshing: false}))
-            .catch((error) => {
-                console.error(error);
-            });
+
+        ApiHelper.call(endPoint, this.state.accessToken)
+            .then((responseJson) => this.setState({coupons: responseJson, isRefreshing: false}));
     }
 
     _renderCoupons() {
-
         return (
             <FlatList
                 data={this.state.coupons.data}
@@ -74,7 +51,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
-        TokenHelper.getAccessToken()
+        ApiHelper.getAccessToken()
             .then((token) => this.setState({accessToken: token}))
             .then(() => this._getCoupons());
     }
@@ -82,13 +59,14 @@ export default class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TopBar doSearch={this._doSearch} showLoading={this.state.isRefreshing}/>
-
+                <HomeTopBar navigation={this.props.navigation}/>
+                <Carousel/>
                 <View style={styles.body}>
+
                     {this._renderCoupons()}
                 </View>
 
-                <TabBar/>
+                <TabBar navigation={this.props.navigation}/>
             </View>
         );
     }
@@ -97,7 +75,9 @@ export default class Home extends Component {
 const styles = StyleSheet.create(
     {
         container: {
-            flex: 1
+            flex: 1,
+            marginTop: 20,
+            backgroundColor: '#ffffff'
         },
         body: {
             flex: 1
@@ -106,6 +86,9 @@ const styles = StyleSheet.create(
             borderTopWidth: 0.5,
             borderColor: '#3e3e3e',
             height: 2
+        },
+        statusBar: {
+            backgroundColor: '#25282e'
         }
     }
 );

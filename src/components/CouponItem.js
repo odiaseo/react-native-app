@@ -17,7 +17,7 @@ export default class CouponItem extends Component {
                     <Text numberOfLines={1} style={styles.merchantTitle}>{coupon.merchant.title}</Text>
                 </View>
                 <TouchableOpacity style={{alignItems: "center"}}>
-                    <Icon name="more-vert" size={25} color="#999999"/>
+                    <Icon name="keyboard-arrow-right" size={25} color="#999999"/>
                 </TouchableOpacity>
             </View>
         );

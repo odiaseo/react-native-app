@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import Home from './src/pages/Home';
+import RouterStack from './src/common/Router';
+import {DrawerNav} from './src/common/Router';
 
 export default class App extends Component {
 
     render() {
         return (
-            <Home/>
+            <DrawerNav/>
         );
     }
 }

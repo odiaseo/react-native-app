@@ -15,17 +15,8 @@ export default class TopBar extends Component {
             showSearch: false
         };
 
-        this.toggleSearch = this.toggleSearch.bind(this);
         this._renderSearchBar = this._renderSearchBar.bind(this);
-        this.onChangeTextDelayed = _.debounce(this.props.doSearch, 500);
-    }
-
-    toggleSearch() {
-        this.setState(
-            {
-                showSearch: !this.state.showSearch
-            }
-        );
+        this.onChangeTextDelayed = _.debounce(this.props.doSearch, 300);
     }
 
     _renderSearchBar() {
@@ -47,22 +38,29 @@ export default class TopBar extends Component {
         return null;
     }
 
+    componentDidMount() {
+        this.search.focus();
+    }
+
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.navBar}>
-                    <Image source={logo} style={styles.logo}/>
-                    <View style={styles.rightNav}>
-                        <TouchableOpacity
-                            onPress={this.toggleSearch}>
-                            <Icon name="search" size={25} color="#FFFFFF"/>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Icon style={styles.navItem} name="menu" size={25} color="#FFFFFF"/>
-                        </TouchableOpacity>
-                    </View>
+            <View style={styles.navBar}>
+                <SearchBar
+                    round
+                    ref={search => this.search = search}
+                    showLoadingIcon={this.props.showLoading}
+                    placeholder='Enter keyword ...'
+                    inputStyle={styles.searchBar}
+                    containerStyle={styles.searchContainer}
+                    onChangeText={(text) => this.onChangeTextDelayed(text)}
+                    onCancel={() => this.setState({showLoading: false})}
+                    onClearText={() => this.setState({showLoading: false})}
+                />
+                <View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DrawerToggle')}>
+                        <Icon style={styles.navItem} name="menu" size={25} color="#FFFFFF"/>
+                    </TouchableOpacity>
                 </View>
-                {this._renderSearchBar()}
             </View>
         );
     }
@@ -73,7 +71,6 @@ const styles = StyleSheet.create(
         container: {},
         navBar: {
             height: 55,
-            marginTop: 20,
             backgroundColor: '#25282e',
             paddingHorizontal: 15,
             flexDirection: 'row',
@@ -89,11 +86,17 @@ const styles = StyleSheet.create(
             alignContent: "center",
         },
         navItem: {
-            marginLeft: 25
+            marginLeft: 5
         },
         searchBar: {
             borderColor: '#25282e',
             fontSize: 14
+        },
+        searchContainer: {
+            marginHorizontal: 5,
+            flex: 1,
+            backgroundColor: '#25282e',
+            marginTop: 5
         }
     }
 );

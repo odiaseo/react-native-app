@@ -7,7 +7,7 @@ export default class TabBar extends Component {
     render() {
         return (
             <View style={styles.tabBar}>
-                <TouchableOpacity style={styles.tabItem}>
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate('Home')}>
                     <Icon name="home" size={25}/>
                     <Text style={styles.tabTitle}>Home</Text>
                 </TouchableOpacity>
