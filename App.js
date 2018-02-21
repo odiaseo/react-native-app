@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {RouterStack, DrawerNav} from './src/common/Router';
-
 import {Provider} from 'react-redux';
 import {creastStore, applyMiddleware, combineReducers, compose} from 'redux';
 import thunkMiddlware from 'redux-thunk';
@@ -25,7 +24,9 @@ const store = configureStore({});
 export default class App extends Component {
     render() {
         return ( 
-            <DrawerNav / >
+            <Provider store={store}>
+                <DrawerNav / >
+            </Provider>
         );
     }
 }
