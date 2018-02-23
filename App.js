@@ -1,31 +1,13 @@
 import React, {Component} from 'react';
-import {RouterStack, DrawerNav} from './src/common/Router';
+import {DrawerNav} from './src/config/router';
 import {Provider} from 'react-redux';
-import {creastStore, applyMiddleware, combineReducers, compose} from 'redux';
-import thunkMiddlware from 'redux-thunk';
-import createLogger from 'redux-logger';
-
-const loggerMiddleware = createLogger({predicate: (getState, action) => __DEV__});
-
-function configureStore(initialState){
-    const enhancer = compose(
-        applyMiddleware(
-            thunkMiddlware,
-            loggerMiddleware
-        )
-    );
-
-    return create(reducer, initialState, enhancer);
-}
-
-const store = configureStore({});
-
+import store from './src/store';
 
 export default class App extends Component {
     render() {
-        return ( 
+        return (
             <Provider store={store}>
-                <DrawerNav / >
+                <DrawerNav {...this.props}/>
             </Provider>
         );
     }

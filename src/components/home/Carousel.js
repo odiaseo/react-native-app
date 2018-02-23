@@ -1,6 +1,5 @@
 import SwipeableParallaxCarousel from 'react-native-swipeable-parallax-carousel'
-import React, {Component} from 'react'
-import ApiHelper from '../../common/ApiHelper'
+import React, {Component} from 'react';
 
 export default class Carousel extends Component {
   constructor (props) {

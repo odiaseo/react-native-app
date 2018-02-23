@@ -1,7 +1,7 @@
 import React from 'react'
-import Home from '../pages/Home'
-import Search from '../pages/Search'
-import Login from '../pages/Login'
+import Home from '../screens/Home'
+import Search from '../screens/Search'
+import Login from '../screens/Login'
 
 import {StackNavigator, DrawerNavigator} from 'react-navigation'
 
@@ -27,7 +27,7 @@ const RootStack = StackNavigator(
       }
     }
   }
-)
+);
 
 export const DrawerNav = DrawerNavigator(
   {
@@ -38,6 +38,6 @@ export const DrawerNav = DrawerNavigator(
       screen: Login
     }
   }
-)
+);
 
 export default RootStack

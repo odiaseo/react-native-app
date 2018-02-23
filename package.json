@@ -5,6 +5,7 @@
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.18.0",
+    "eslint-config-rallycoding": "^3.2.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^6.0.0",
@@ -29,6 +30,7 @@
   "dependencies": {
     "@types/react": "^16.0.38",
     "babel-core": "^6.26.0",
+    "babel-plugin-dotenv": "^0.1.1",
     "create-react-app": "^1.5.2",
     "expo": "^25.0.0",
     "glob": "^7.1.2",
@@ -36,7 +38,6 @@
     "numeral": "^2.0.6",
     "react": "16.2.0",
     "react-native": "^0.52.0",
-    "react-native-dotenv": "^0.1.1",
     "react-native-elements": "^0.19.0",
     "react-native-interactable": "^0.1.10",
     "react-native-swipeable-parallax-carousel": "^1.1.0",
