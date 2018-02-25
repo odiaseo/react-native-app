@@ -7,10 +7,16 @@ import {persistStore} from 'redux-persist';
 import {PersistGate} from 'redux-persist/integration/react';
 import {StatusBar} from 'react-native';
 import {styleVariables} from './src/common/styles';
+import {Dimensions} from 'react-native';
 
 const persistor = persistStore(store);
 
 export default class App extends Component {
+
+    setDeviceOrientation() {
+        const {width, height} = Dimensions.get('window');
+        console.log(width, height);
+    }
 
     render() {
         return (
@@ -24,7 +30,7 @@ export default class App extends Component {
                         translucent={false}
                         backgroundColor={styleVariables.headerColor}
                     />
-                    <DrawerNav {...this.props}/>
+                    <DrawerNav {...this.props} onLayout={this.setDeviceOrientation.bind(this)}/>
                 </PersistGate>
             </Provider>
         );

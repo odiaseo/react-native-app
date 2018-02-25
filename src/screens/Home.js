@@ -1,8 +1,9 @@
 import React, {Component,} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import HomeTopBar from '../components/home/HomeTopBar';
+import CouponScroller from '../components/home/CouponScroller';
 import ImageCarousel from '../components/home/ImageCarousel';
-import TabBar from '../components/TabBar';
+import TabBar from '../components/navigation/TabBar';
 import {connect} from 'react-redux';
 import {ActionCreators} from "../actions";
 import {bindActionCreators} from 'redux';
@@ -14,25 +15,30 @@ class Home extends Component {
     parentScrollView = null;
 
     static navigationOptions = {
-        title: 'Home',
+        title: 'HOME',
         header: null
     };
 
     componentDidMount() {
-        this.props.setActivityStatus(true);
-        this.props.getHomePageCoupons();
+        //this.props.setActivityStatus(true);
+        //this.props.getHomePageCoupons();
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <HomeTopBar {...this.props}/>
+
                 <ScrollView ref={(c) => this.parentScrollView = c}>
-                    <ImageCarousel parentScrollView={this.parentScrollView} {...this.props}/>
-                    <View style={[commonStyles.vertical, styles.body]}>
+                    <View style={styles.body}>
+                        <View style={{marginBottom: 5}}>
+                            <ImageCarousel parentScrollView={this.parentScrollView} {...this.props}/>
+                        </View>
+                        <CouponScroller />
                         <CouponList {...this.props} list={this.props.coupons}/>
                     </View>
                 </ScrollView>
+
                 <TabBar navigation={this.props.navigation}/>
             </View>
         );
@@ -57,13 +63,14 @@ const styles = StyleSheet.create(
     {
         container: {
             flex: 1,
+            flexDirection: 'column',
             marginTop: 20,
             backgroundColor: styleVariables.backgroundColor
         },
 
         body: {
             flex: 1,
-            marginTop: 5,
+            justifyContent: 'center',
         },
         divider: {
             borderTopWidth: 0.5,

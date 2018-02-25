@@ -1,15 +1,17 @@
 import React from 'react';
 import Home from '../screens/Home';
 import Category from '../screens/Category';
-import Search from '../screens/Search';
+import CouponSearch from '../screens/search/CouponSearch';
 import Login from '../screens/Login';
 import {StackNavigator, DrawerNavigator, TabNavigator} from 'react-navigation'
 import CouponDetail from "../screens/CouponDetail";
+import MerchantDetail from "../screens/MerchantDetail";
 import {styleVariables} from '../common/styles';
 import Trending from "../screens/tabs/Trending";
 import TopCoupons from "../screens/tabs/TopCoupons";
 import PopularCoupons from "../screens/tabs/PopularCoupons";
 import ExpiringCoupons from "../screens/tabs/ExpiringCoupons";
+import MerchantSearch from "../screens/search/MerchantSearch";
 
 export const TabNav = TabNavigator(
     {
@@ -63,8 +65,8 @@ const RootStack = StackNavigator(
         Home: {
             screen: Home
         },
-        Search: {
-            screen: Search
+        CouponSearch: {
+            screen: CouponSearch
         },
         CouponDetail: {
             screen: CouponDetail
@@ -72,23 +74,31 @@ const RootStack = StackNavigator(
         CategoryList: {
             screen: Category
         },
-        Trending: {
+        WhatsHot: {
             screen: TabNav
-        }
+        },
+        MerchantSearch: {
+            screen: MerchantSearch
+        },
+        MerchantDetail: {
+            screen: MerchantDetail
+        },
     },
     {
         initialRouteName: 'Home',
         navigationOptions: {
             headerStyle: {
                 backgroundColor: styleVariables.headerBackgroundColor,
-                height: 40
+                height: 35
             },
             headerTintColor: styleVariables.headerColor,
             headerTitleStyle: {
                 fontSize: styleVariables.mainTextFontSize
             },
+            gesturesEnabled: true,
             headerBackTitleStyle: {
-                fontSize: styleVariables.mainTextFontSize
+                fontSize: styleVariables.mainTextFontSize,
+                color: styleVariables.headerColor,
             }
         }
     }
@@ -102,6 +112,9 @@ export const DrawerNav = DrawerNavigator(
         Login: {
             screen: Login
         }
+    },
+    {
+        //drawerBackgroundColor: styleVariables.headerBackgroundColor
     }
 );
 

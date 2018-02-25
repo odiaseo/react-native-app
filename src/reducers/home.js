@@ -2,39 +2,6 @@ import createReducer from "../common/createReducer";
 import * as types from "../actions/types";
 import options from '../config/options'
 
-const defaultSliders = [
-    {
-        'id': 1,
-        'title': '',
-        'imagePath': options.sliderImageDomain + '/images/slides/optimized/70-percent-sale.jpg'
-    },
-    {
-        'id': 2,
-        'title': '',
-        'imagePath': options.sliderImageDomain + '/images/slides/optimized/clothing-footwear-accessories.jpg'
-    },
-    {
-        'id': 3,
-        'title': '',
-        'imagePath': options.sliderImageDomain + '/images/slides/optimized/womens-fashion.jpg'
-    },
-    {
-        'id': 4,
-        'title': '',
-        'imagePath': options.sliderImageDomain + '/images/slides/optimized/bra-sales.jpg'
-    },
-    {
-        'id': 5,
-        'title': '',
-        'imagePath': options.sliderImageDomain + '/images/slides/optimized/mens-clothing-sale.jpg'
-    },
-    {
-        'id': 6,
-        'title': '',
-        'imagePath': options.sliderImageDomain + '/images/slides/optimized/back-to-school-sale.jpg'
-    },
-];
-
 export const accessToken = createReducer("", {
 
     [types.SET_ACCESS_TOKEN](state, action) {
@@ -46,7 +13,7 @@ export const accessToken = createReducer("", {
     }
 });
 
-export const sliders = createReducer(defaultSliders, {
+export const sliders = createReducer([], {
     [types.SET_FOUND_SLIDES](state, action) {
 
         if (action.result.data) {

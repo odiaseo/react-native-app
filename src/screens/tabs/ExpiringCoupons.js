@@ -10,8 +10,8 @@ import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 class ExpiringCoupons extends Component {
 
     static navigationOptions = {
-        title: 'Expiring',
-        headerRight: (<HeaderRight/>)
+        title: 'EXPIRING',
+        headerRight: (<HeaderRight searchPage="CouponSearch"/>)
     };
 
     componentDidMount() {

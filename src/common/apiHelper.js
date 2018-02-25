@@ -3,6 +3,8 @@ import options from '../config/options';
 import moment from 'moment';
 import * as constant from '../constants';
 
+const querystring = require('querystring');
+
 const call = function (endPoint, token = "", body = null, method = 'GET') {
 
     let url = options.apiUrl + endPoint;
@@ -57,8 +59,31 @@ const ApiHelper = {
             .then((responseJson) => responseJson);
     },
 
-    searchCoupons(accessToken, searchTerm, page = 1) {
-        let endPoint = '/search/voucher?per_page=20&keyword=' + searchTerm + '&page=' + page;
+    getMerchantById(accessToken, merchantId) {
+
+        let endPoint = `/merchant/${merchantId}`;
+
+        return call(endPoint, accessToken)
+            .then((responseJson) => responseJson);
+    },
+
+
+    getMerchants(accessToken, keyword, page, limit = 20) {
+        let params = {
+            unique_field: 'title',
+            fields: ['id', 'title', 'logo', 'voucher_count', 'is_featured', 'is_exclusive'].join(','),
+            filters: ['has_logo=true', 'is_active=true'].join(','),
+            keyword: keyword,
+            page: page,
+            per_page: limit
+        };
+
+        let queryString = querystring.stringify(params);
+
+        //let endPoint = `/search/merchant?filter=is_active=true,is_profitable=true,has_logo=true,&per_page=${limit}&page=${page}&keyword=${keyword}`;
+        let endPoint = `/type-ahead/merchant?${queryString}`;
+        console.log(endPoint);
+
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
     },
@@ -90,6 +115,12 @@ const ApiHelper = {
     getCarouselSlides(accessToken) {
         let today = moment().format('YYYY-MM-DD');
         let endPoint = `/slide?filters=is_active=true,end_at=${today}>`;
+        return call(endPoint, accessToken)
+            .then((responseJson) => responseJson);
+    },
+
+    searchCoupons(accessToken, searchTerm, page = 1, limit =20) {
+        let endPoint = `/search/voucher?per_page=${limit}&keyword=${searchTerm}&page=${page}`;
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
     },

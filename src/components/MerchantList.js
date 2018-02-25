@@ -5,7 +5,7 @@ import commonStyles, {styleVariables} from "../common/styles";
 import {renderOfferCount} from "../common/helperFuntions";
 import {List, ListItem} from 'react-native-elements'
 
-export default class CouponList extends Component {
+export default class MerchantList extends Component {
 
     render() {
         if (this.props.showLoading) {
@@ -19,16 +19,16 @@ export default class CouponList extends Component {
             <ScrollView>
                 <List containerStyle={commonStyles.listContainerStyle}>
                     {
-                        this.props.list.map((coupon) => (
+                        this.props.list.map((merchant, index) => (
                             <ListItem
-                                avatar={{uri: coupon.merchant.logo}}
-                                key={coupon.id}
-                                onPress={() => this.props.navigation.navigate('CouponDetail', {coupon: coupon})}
-                                subtitle={coupon.merchant.title + renderOfferCount(coupon.merchant.stats.voucher_count, true)}
+                                avatar={{uri: merchant.logo}}
+                                key={index}
+                                onPress={() => this.props.navigation.navigate('MerchantDetail', {tempData: merchant})}
+                                subtitle={renderOfferCount(merchant.voucher_count)}
                                 titleStyle={{fontSize: styleVariables.mainTextFontSize}}
-                                subtitleStyle={commonStyles.listSubTitleText}
+                                subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: 'normal'}}
                                 containerStyle={{borderBottomColor: styleVariables.borderColor, marginTop: 0}}
-                                title={coupon.title}
+                                title={merchant.title}
                             />
                         ))
                     }

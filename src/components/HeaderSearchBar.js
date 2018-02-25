@@ -9,7 +9,7 @@ import _ from 'lodash';
 import Touchable from 'react-native-platform-touchable';
 import {styleVariables} from "../common/styles";
 
-class TopBar extends Component {
+class HeaderSearchBar extends Component {
 
     searchRef: null;
 
@@ -38,21 +38,16 @@ class TopBar extends Component {
                     ref={(search) => {
                         this.searchRef = search
                     }}
-                    showLoadingIcon={this.props.showLoading}
+                    showLoadingIcon={false}
                     placeholder='Enter keyword ...'
                     inputStyle={styles.searchBar}
                     containerStyle={styles.searchContainer}
                     autoCapitalize={'none'}
+                    icon={{style: styles.iconStyle}}
+                    loadingIcon={{style: styles.iconStyle}}
+                    clearIcon={{style: styles.iconStyle, color: styleVariables.headerColor}}
                     onChangeText={(text) => this.onChangeTextDelayed(text)}
-                    clearIcon={{color: '#86939c'}}
                 />
-                <View>
-                    <Touchable
-                        hitSlop={styleVariables.hitSlop}
-                        onPress={() => this.props.navigation.navigate('DrawerToggle')}>
-                        <Icon style={styles.navItem} name="menu" size={25} color="#FFFFFF"/>
-                    </Touchable>
-                </View>
             </View>
         )
     }
@@ -69,39 +64,36 @@ function mapStateTopProps(state) {
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(TopBar);
+export default connect(mapStateTopProps, mapDispatchToProps)(HeaderSearchBar);
 
 const styles = StyleSheet.create(
     {
-        container: {},
+        searchContainer: {
+            height: 35,
+            padding: 0,
+            margin: 0,
+            marginTop: 0,
+            paddingTop: 0,
+            backgroundColor: 'transparent',
+            borderTopWidth: 0,
+            borderBottomWidth: 0
+        },
+        iconStyle: {
+            top: 7.5,
+        },
         navBar: {
-            height: 55,
+            flex:1,
             backgroundColor: '#25282e',
-            paddingHorizontal: 15,
+            paddingHorizontal: 0,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between'
         },
-        logo: {
-            height: 22
-        },
-        rightNav: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignContent: 'center'
-        },
-        navItem: {
-            marginLeft: 5
-        },
+
         searchBar: {
             borderColor: '#25282e',
-            fontSize: 14
+            fontSize: 12,
+            marginTop: 0,
         },
-        searchContainer: {
-            marginHorizontal: 5,
-            flex: 1,
-            backgroundColor: '#25282e',
-            marginTop: 5
-        }
     }
 );

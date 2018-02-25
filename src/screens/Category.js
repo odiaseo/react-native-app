@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
-import TabBar from '../components/TabBar';
+import TabBar from '../components/navigation/TabBar';
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
@@ -14,7 +14,7 @@ import * as util from '../common/helperFuntions';
 class Category extends Component {
 
     static navigationOptions = {
-        title: 'Categories',
+        title: 'CATEGORIES',
         headerRight: (<HeaderRight/>),
     };
 
@@ -36,13 +36,13 @@ class Category extends Component {
 
         return (
             <ScrollView>
-                <List containerStyle={{marginVertical: 0, paddingHorizontal: 10}}>
+                <List containerStyle={commonStyles.listContainerStyle}>
                     {
                         list.map((category, index) => (
                             <ListItem
                                 leftIcon={{name: util.getIconName(category.icon_class_name), type: 'font-awesome'}}
                                 key={index}
-                                subtitle={category.stats.voucher_count + ' offers'}
+                                subtitle={util.renderOfferCount(category.stats.voucher_count)}
                                 titleStyle={{fontSize: styleVariables.mainTextFontSize}}
                                 subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: 'normal'}}
                                 containerStyle={{borderBottomColor: styleVariables.borderColor, marginTop: 0}}

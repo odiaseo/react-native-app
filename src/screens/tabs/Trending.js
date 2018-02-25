@@ -7,11 +7,11 @@ import _ from 'lodash';
 import CouponTab from "../../components/CouponTab";
 import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 
-class ExpiringCoupons extends Component {
+class Trending extends Component {
 
     static navigationOptions = {
-        title: 'Trending',
-        headerRight: (<HeaderRight/>)
+        title: 'LATEST',
+        headerRight: (<HeaderRight searchPage="CouponSearch"/>)
     };
 
     componentDidMount() {
@@ -40,4 +40,4 @@ function mapStateTopProps(state) {
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(ExpiringCoupons);
+export default connect(mapStateTopProps, mapDispatchToProps)(Trending);

@@ -86,7 +86,9 @@ storeCoupons = function (state, action) {
     let items = {};
 
     action.result.data.forEach((coupon) => {
-        items[coupon.id] = coupon
+        if (coupon.merchant) {
+            items[coupon.id] = coupon
+        }
     });
 
     return items;

@@ -39,6 +39,11 @@ const commonStyles = StyleSheet.create({
         height: 60,
         width: 80,
     },
+    listSubTitleText: {
+        fontSize: styleVariables.infoTextFontSize,
+        fontWeight: 'normal',
+        marginTop: 5
+    },
     list: {
         flex: 1,
         flexDirection: 'row'
@@ -75,6 +80,14 @@ const commonStyles = StyleSheet.create({
         padding: 8,
         backgroundColor: '#EEEEEE'
     },
+
+    listContainerStyle: {
+        marginTop: 0,
+        marginBottom: 0,
+        paddingHorizontal: 10,
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+    }
 });
 
 export default commonStyles;

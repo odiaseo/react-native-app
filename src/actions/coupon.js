@@ -53,7 +53,11 @@ export function searchCouponsByKeyword(searchTerm, page = 1) {
 
 export function getCategories() {
     return (dispatch, getState) => {
-        const {accessToken} = getState();
+        const {accessToken, categories} = getState();
+
+        if (!_.isEmpty(categories)) {
+            return state;
+        }
 
         return apiHelper.listCategories(accessToken)
             .then((resp) => {

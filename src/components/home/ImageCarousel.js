@@ -1,19 +1,56 @@
 import React, {Component} from 'react';
-import {bindActionCreators} from "redux";
-import {ActionCreators} from "../../actions";
-import {connect} from "react-redux";
 import Carousel from 'react-native-smart-carousel';
+import options from '../../config/options'
 
-class ImageCarousel extends Component {
+export default class ImageCarousel extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            sliders: [
+                {
+                    'id': 1,
+                    'title': '',
+                    'imagePath': options.sliderImageDomain + '/images/slides/optimized/70-percent-sale.jpg'
+                },
+                {
+                    'id': 2,
+                    'title': '',
+                    'imagePath': options.sliderImageDomain + '/images/slides/optimized/clothing-footwear-accessories.jpg'
+                },
+                {
+                    'id': 3,
+                    'title': '',
+                    'imagePath': options.sliderImageDomain + '/images/slides/optimized/womens-fashion.jpg'
+                },
+                {
+                    'id': 4,
+                    'title': '',
+                    'imagePath': options.sliderImageDomain + '/images/slides/optimized/bra-sales.jpg'
+                },
+                {
+                    'id': 5,
+                    'title': '',
+                    'imagePath': options.sliderImageDomain + '/images/slides/optimized/mens-clothing-sale.jpg'
+                },
+                {
+                    'id': 6,
+                    'title': '',
+                    'imagePath': options.sliderImageDomain + '/images/slides/optimized/back-to-school-sale.jpg'
+                },
+            ]
+
+        }
+    }
 
     render() {
-        if (this.props.sliders.length === 0) {
+        if (this.state.sliders.length === 0) {
             return null;
         }
 
         return (
             <Carousel
-                data={this.props.sliders}
+                data={this.state.sliders}
                 height={200}
                 autoPlay={true}
                 playTime={5000}
@@ -26,16 +63,3 @@ class ImageCarousel extends Component {
         )
     }
 }
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(ActionCreators, dispatch);
-}
-
-function mapStateTopProps(state) {
-    return {
-        sliders: state.sliders ? Object.values(state.sliders) : [],
-    };
-}
-
-export default connect(mapStateTopProps, mapDispatchToProps)(ImageCarousel);
-

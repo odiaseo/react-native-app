@@ -10,8 +10,8 @@ import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 class PopularCoupons extends Component {
 
     static navigationOptions = {
-        title: 'Popular',
-        headerRight: (<HeaderRight/>)
+        title: 'POPULAR',
+        headerRight: (<HeaderRight searchPage="CouponSearch"/>)
     };
 
     componentDidMount() {

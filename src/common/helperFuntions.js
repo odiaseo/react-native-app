@@ -1,5 +1,6 @@
 import moment from "moment/moment";
 import {styleVariables} from "./styles";
+import numeral from 'numeral';
 
 export function renderExpiryDate(coupon) {
     if (coupon.end_at) {
@@ -8,11 +9,19 @@ export function renderExpiryDate(coupon) {
     return 'While stock last';
 }
 
-export function renderVoucherCount(voucherCount) {
-    if (voucherCount > 0) {
-        return ' (' + voucherCount + ' offers)';
+
+export function renderOfferCount(count, wrap = false) {
+    if (count <= 0) {
+        return null;
     }
-    return null;
+
+    let value = numeral(count).format('0,0') + ' offers';
+
+    if (wrap) {
+        return ' (' + value + ')';
+    }
+
+    return value;
 }
 
 export function getIconName(text) {

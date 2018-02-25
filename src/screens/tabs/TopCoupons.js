@@ -10,8 +10,8 @@ import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 class TopCoupons extends Component {
 
     static navigationOptions = {
-        title: 'Best',
-        headerRight: (<HeaderRight/>)
+        title: 'TOP 20',
+        headerRight: (<HeaderRight searchPage="CouponSearch"/>)
     };
 
     componentDidMount() {

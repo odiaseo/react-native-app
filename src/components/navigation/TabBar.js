@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {StyleSheet, Text, View} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Touchable from 'react-native-platform-touchable';
-import {styleVariables} from "../common/styles";
+import {styleVariables} from "../../common/styles";
 
 export default class TabBar extends Component {
     render() {
@@ -16,30 +16,34 @@ export default class TabBar extends Component {
                         <Text style={styles.tabTitle}>Home</Text>
                     </View>
                 </Touchable>
+
                 <Touchable
                     hitSlop={styleVariables.hitSlop}
                     style={styles.tabItem}
-                    onPress={() => this.props.navigation.navigate('Trending')}>
+                    onPress={() => this.props.navigation.navigate('WhatsHot')}>
                     <View style={styles.tabItem}>
                         <Icon name="whatshot" size={25}/>
                         <Text style={styles.tabTitle}>Trending</Text>
                     </View>
                 </Touchable>
+
                 <Touchable
+                    hitSlop={styleVariables.hitSlop}
                     style={styles.tabItem}
-                    hitSlop={styleVariables.hitSlop}>
+                    onPress={() => this.props.navigation.navigate('MerchantSearch')}>
                     <View style={styles.tabItem}>
                         <Icon name="subscriptions" size={25}/>
-                        <Text style={styles.tabTitle}>Subscription</Text>
+                        <Text style={styles.tabTitle}>Stores</Text>
                     </View>
                 </Touchable>
+
                 <Touchable
                     style={styles.tabItem}
                     hitSlop={styleVariables.hitSlop}
                     onPress={() => this.props.navigation.navigate('CategoryList')}>
                     <View style={styles.tabItem}>
                         <Icon name="folder" size={25}/>
-                        <Text style={styles.tabTitle}>Category</Text>
+                        <Text style={styles.tabTitle}>Categories</Text>
                     </View>
                 </Touchable>
             </View>
