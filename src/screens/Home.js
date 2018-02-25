@@ -1,43 +1,38 @@
 import React, {Component,} from 'react';
-import {StyleSheet, FlatList, View, Text, TouchableHighlight} from 'react-native';
-import CouponItem from '../components/CouponItem';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import HomeTopBar from '../components/home/HomeTopBar';
-import Carousel from '../components/home/Carousel';
+import ImageCarousel from '../components/home/ImageCarousel';
 import TabBar from '../components/TabBar';
 import {connect} from 'react-redux';
 import {ActionCreators} from "../actions";
 import {bindActionCreators} from 'redux';
+import commonStyles, {styleVariables} from '../common/styles';
+import _ from 'lodash';
+import CouponList from "../components/CouponList";
 
 class Home extends Component {
+    parentScrollView = null;
+
     static navigationOptions = {
         title: 'Home',
         header: null
     };
 
-    _renderCoupons() {
-        return (
-            <FlatList
-                data={this.props.coupons}
-                renderItem={(coupon) => <CouponItem coupon={coupon.item}/>}
-                keyExtractor={(item) => item.id}
-                itemSeparatorComponent={() => <View style={styles.divider}/>}
-            />
-        );
-    }
-
     componentDidMount() {
-        this.props.getCoupons();
+        this.props.setActivityStatus(true);
+        this.props.getHomePageCoupons();
     }
 
     render() {
         return (
             <View style={styles.container}>
                 <HomeTopBar {...this.props}/>
-                <Carousel/>
-                <View style={styles.body}>
-                    {this._renderCoupons()}
-                </View>
-
+                <ScrollView ref={(c) => this.parentScrollView = c}>
+                    <ImageCarousel parentScrollView={this.parentScrollView} {...this.props}/>
+                    <View style={[commonStyles.vertical, styles.body]}>
+                        <CouponList {...this.props} list={this.props.coupons}/>
+                    </View>
+                </ScrollView>
                 <TabBar navigation={this.props.navigation}/>
             </View>
         );
@@ -51,7 +46,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateTopProps(state) {
     return {
-        coupons: state.foundCoupons.coupons ? Object.values(state.foundCoupons.coupons) : [],
+        coupons: _.isEmpty(state.foundCoupons) ? [] : Object.values(state.foundCoupons),
+        showLoading: state.refreshStatus.isRefreshing,
     };
 }
 
@@ -62,10 +58,12 @@ const styles = StyleSheet.create(
         container: {
             flex: 1,
             marginTop: 20,
-            backgroundColor: '#FFFFFF'
+            backgroundColor: styleVariables.backgroundColor
         },
+
         body: {
-            flex: 1
+            flex: 1,
+            marginTop: 5,
         },
         divider: {
             borderTopWidth: 0.5,

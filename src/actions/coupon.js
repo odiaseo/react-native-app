@@ -1,48 +1,73 @@
 import * as types from './types';
 import apiHelper from "../common/apiHelper";
-import _ from 'lodash';
+import * as constant from '../constants';
 
-export function getCoupons(page = 1) {
+export function getHomePageCoupons(page = 1) {
+    return _getCoupons(constant.FEATURED_COUPONS);
+}
+
+export function getFeatureCoupons(page = 1) {
+    return _getCoupons(constant.FEATURED_COUPONS, types.SET_FEATURED_COUPONS);
+}
+
+export function getTopCoupons(page = 1) {
+    return _getCoupons(constant.TOP_COUPONS, types.SET_TOP_COUPONS);
+}
+
+export function getLatestCoupons(page = 1) {
+    return _getCoupons(constant.LATEST_COUPONS, types.SET_LATEST_COUPONS);
+}
+
+export function getExpiringCoupons(page = 1) {
+    return _getCoupons(constant.EXPIRING_COUPONS, types.SET_EXPIRING_COUPONS);
+}
+
+export function getPopularCoupons(page = 1) {
+    return _getCoupons(constant.POPULAR_COUPONS, types.SET_POPULAR_COUPONS);
+}
+
+export function _getCoupons(segment, type = types.SET_FOUND_COUPONS, page = 1) {
     return (dispatch, getState) => {
-        return apiHelper.getAccessToken()
-            .then((token) => apiHelper.getCoupons(token, {page: page}))
+        const {accessToken} = getState();
+
+        return apiHelper.getCoupons(accessToken, segment, page)
             .then((resp) => {
-                dispatch(setFoundCoupons({result: resp}));
+                dispatch(setFoundResults({result: resp, type: type}));
                 dispatch(setRefreshStatus({status: false}));
             }).catch((ex) => console.log(ex));
     }
 }
 
-export function searchCoupons(searchTerm, page = 1) {
+export function searchCouponsByKeyword(searchTerm, page = 1) {
     return (dispatch, getState) => {
+        const {accessToken} = getState();
 
-        let endPoint = '/search/voucher?per_page=20&keyword=' + searchTerm + '&page=' + page;
-
-        return apiHelper.getAccessToken()
-            .then((token) => apiHelper.call(endPoint, token))
+        return apiHelper.searchCoupons(accessToken, searchTerm, page)
             .then((resp) => {
-                dispatch(setSearchedCoupons({result: resp}));
+                dispatch(setSearchTerm({keyword: searchTerm}));
+                dispatch(setFoundResults({result: resp, type: types.SET_SEARCHED_COUPONS}));
                 dispatch(setRefreshStatus({status: false}));
             }).catch((ex) => console.log(ex));
     }
 }
 
-export function debouncedSearch(search, page) {
-    return _.debounce(searchCoupons(search, page), 300);
-}
+export function getCategories() {
+    return (dispatch, getState) => {
+        const {accessToken} = getState();
 
-export function setFoundCoupons({result}) {
-
-    return {
-        type: types.SET_FOUND_COUPONS,
-        result
+        return apiHelper.listCategories(accessToken)
+            .then((resp) => {
+                dispatch(setFoundResults({result: resp, type: types.SET_FOUND_CATEGORIES}));
+                dispatch(setRefreshStatus({status: false}));
+            }).catch((ex) => console.log(ex));
     }
 }
 
-export function setSearchedCoupons({result}) {
+
+export function setFoundResults({result, type}) {
 
     return {
-        type: types.SET_SEARCHED_COUPONS,
+        type: type,
         result
     }
 }

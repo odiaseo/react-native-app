@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, FlatList, View} from 'react-native';
-import CouponItem from '../components/CouponItem';
+import {StyleSheet, View} from 'react-native';
 import TopBar from '../components/TopBar';
 import TabBar from '../components/TabBar';
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
-
+import _ from 'lodash';
+import CouponList from "../components/CouponList";
 
 class Search extends Component {
 
@@ -20,15 +20,10 @@ class Search extends Component {
                 <TopBar {...this.props}/>
 
                 <View style={styles.body}>
-                    <FlatList
-                        data={this.props.searchedCoupons}
-                        renderItem={(coupon) => <CouponItem coupon={coupon.item}/>}
-                        keyExtractor={(item) => item.id}
-                        itemSeparatorComponent={() => <View style={styles.divider}/>}
-                    />
+                    <CouponList {...this.props} list={this.props.searchedCoupons} />
                 </View>
 
-                <TabBar navigation={this.props.navigation}/>
+                <TabBar {...this.props}/>
             </View>
         );
     }
@@ -40,7 +35,9 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateTopProps(state) {
     return {
-        searchedCoupons: state.searchedCoupons.coupons ? Object.values(state.searchedCoupons.coupons) : [],
+        searchedCoupons: _.isEmpty(state.searchedCoupons.coupons) ? [] : Object.values(state.searchedCoupons.coupons),
+        searchTerm: state.searchTerm,
+        showLoading: state.refreshStatus.isRefreshing,
     };
 }
 

@@ -16,6 +16,7 @@ export default class Logo extends Component {
 const styles = StyleSheet.create(
     {
         logo: {
+            marginLeft:10,
             height: 22
         }
     }

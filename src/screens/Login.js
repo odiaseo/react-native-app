@@ -1,23 +1,16 @@
-import React, {Component} from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import React, {Component} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import TabBar from '../components/TabBar';
+import commonStyles from '../common/styles';
 
 export default class Login extends Component {
-  render () {
-    return (
-      <View style={styles.container}>
-        <Text>Please Login</Text>
-      </View>
-    )
-  }
-}
+    render() {
+        return (
+            <View style={commonStyles.container}>
+                <Text>Please Login</Text>
+                <TabBar {...this.props}/>
+            </View>
 
-const styles = StyleSheet.create(
-  {
-    container: {
-      flex: 1,
-      backgroundColor: '#455a64',
-      alignItems: 'center',
-      justifyContent: 'center'
+        )
     }
-  }
-)
+}

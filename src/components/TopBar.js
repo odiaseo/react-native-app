@@ -1,23 +1,27 @@
 import React, {Component} from 'react'
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View, Keyboard} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {SearchBar} from 'react-native-elements';
 import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+import _ from 'lodash';
+import Touchable from 'react-native-platform-touchable';
+import {styleVariables} from "../common/styles";
 
 class TopBar extends Component {
     search: null;
 
-    updateLoadingStatus(status) {
-        this.props.setRefreshStatus({status: status});
+    constructor(props) {
+        super(props);
+        this.onChangeTextDelayed = _.debounce(this.onChangeTextDelayed.bind(this), 500);
     }
 
     onChangeTextDelayed(searchTerm, page = 1) {
-        console.log(this.search.value);
         if (searchTerm.length > 2) {
-            this.props.setRefreshStatus({status: true});
-            this.props.searchCoupons(searchTerm, page);
+            this.props.setActivityStatus(true);
+            this.props.searchCouponsByKeyword(searchTerm, page);
+            Keyboard.dismiss();
         }
     }
 
@@ -36,18 +40,14 @@ class TopBar extends Component {
                     inputStyle={styles.searchBar}
                     containerStyle={styles.searchContainer}
                     autoCapitalize={'none'}
-                    returnKeyLabel={'search'}
-                    returnKeyType={'search'}
-                    clearButtonMode={'always'}
-                    enablesReturnKeyAutomatically={true}
                     onChangeText={(text) => this.onChangeTextDelayed(text)}
-                    onCancel={() => this.updateLoadingStatus(false)}
-                    onClearText={() => this.updateLoadingStatus(false)}
                 />
                 <View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('DrawerToggle')}>
+                    <Touchable
+                        hitSlop={styleVariables.hitSlop}
+                        onPress={() => this.props.navigation.navigate('DrawerToggle')}>
                         <Icon style={styles.navItem} name="menu" size={25} color="#FFFFFF"/>
-                    </TouchableOpacity>
+                    </Touchable>
                 </View>
             </View>
         )
