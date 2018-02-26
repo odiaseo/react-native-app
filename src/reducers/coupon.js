@@ -1,5 +1,6 @@
 import * as types from "../actions/types";
 import createReducer from "../common/createReducer";
+import _ from 'lodash';
 
 export const foundCoupons = createReducer({}, {
     [types.SET_FOUND_COUPONS](state, action) {
@@ -77,6 +78,32 @@ export const searchTerm = createReducer({}, {
         return action.keyword;
     }
 });
+
+export const categoryOffers = createReducer({}, {
+    [types.SET_CATEGORY_OFFERS](state, action) {
+
+        return formatCategoryOffers(action.categories, action.result);
+
+        //return action.result;
+    }
+});
+
+
+formatCategoryOffers = function (categories, offers) {
+    let sections = [];
+
+    _.forEach(offers, (items, categoryId) => {
+        if (1 !== categoryId && categories.hasOwnProperty(categoryId)) {
+            sections.push({
+                title: categories[categoryId].title,
+                data: items
+            });
+        }
+    });
+
+    return sections;
+};
+
 
 storeCoupons = function (state, action) {
     if (!action.result.data) {

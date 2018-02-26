@@ -19,11 +19,6 @@ class Home extends Component {
         header: null
     };
 
-    componentDidMount() {
-        //this.props.setActivityStatus(true);
-        //this.props.getHomePageCoupons();
-    }
-
     render() {
         return (
             <View style={styles.container}>
@@ -34,8 +29,8 @@ class Home extends Component {
                         <View style={{marginBottom: 5}}>
                             <ImageCarousel parentScrollView={this.parentScrollView} {...this.props}/>
                         </View>
-                        <CouponScroller />
-                        <CouponList {...this.props} list={this.props.coupons}/>
+                        <CouponScroller sections={this.props.categoryOffers}/>
+                        {/*<CouponList {...this.props} list={this.props.coupons}/> */}
                     </View>
                 </ScrollView>
 
@@ -54,6 +49,7 @@ function mapStateTopProps(state) {
     return {
         coupons: _.isEmpty(state.foundCoupons) ? [] : Object.values(state.foundCoupons),
         showLoading: state.refreshStatus.isRefreshing,
+        categoryOffers: state.categoryOffers,
     };
 }
 

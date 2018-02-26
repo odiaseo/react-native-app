@@ -38,6 +38,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.20.1",
     "numeral": "^2.0.6",
+    "prop-types": "^15.6.0",
     "querystring": "^0.2.0",
     "react": "16.2.0",
     "react-native": "^0.52.0",

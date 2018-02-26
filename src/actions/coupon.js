@@ -67,6 +67,15 @@ export function getCategories() {
     }
 }
 
+export function getCategoryCarouselOffers(categoryIdList = []) {
+    return (dispatch, getState) => {
+        const {accessToken, categories} = getState();
+
+        let resp = apiHelper.getCategoryOffers(accessToken, categoryIdList);
+
+        dispatch(setCarouselCategoryResults({result: resp, categories: categories, type: types.SET_CATEGORY_OFFERS}));
+    }
+}
 
 export function setFoundResults({result, type}) {
 
@@ -74,6 +83,11 @@ export function setFoundResults({result, type}) {
         type: type,
         result
     }
+}
+
+export function setCarouselCategoryResults(response) {
+
+    return response;
 }
 
 export function setRefreshStatus({status}) {
