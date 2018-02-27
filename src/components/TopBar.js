@@ -11,7 +11,7 @@ import {styleVariables} from "../common/styles";
 
 class TopBar extends Component {
 
-    searchRef: null;
+    searchRef = null;
 
     constructor(props) {
         super(props);

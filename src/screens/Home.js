@@ -29,7 +29,7 @@ class Home extends Component {
                         <View style={{marginBottom: 5}}>
                             <ImageCarousel parentScrollView={this.parentScrollView} {...this.props}/>
                         </View>
-                        <CouponScroller sections={this.props.categoryOffers}/>
+                        {/*<CouponScroller sections={this.props.categoryOffers}/>*/}
                         {/*<CouponList {...this.props} list={this.props.coupons}/> */}
                     </View>
                 </ScrollView>

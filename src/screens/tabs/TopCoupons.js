@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import _ from 'lodash';
 import CouponTab from '../../components/CouponTab';
 import SiteActivityIndicator from "../../components/SiteActivityIndicator";
+import * as types from '../../actions/types';
 
 class TopCoupons extends Component {
 
@@ -16,7 +17,7 @@ class TopCoupons extends Component {
 
     componentDidMount() {
         this.props.setActivityStatus(true);
-        this.props.getTopCoupons();
+        this.props.getCouponsByType(types.SET_TOP_COUPONS);
     }
 
     render() {

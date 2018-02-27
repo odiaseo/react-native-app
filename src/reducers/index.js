@@ -1,11 +1,11 @@
 import {combineReducers} from 'redux';
-import * as navigationReducer from './navigation'
+import * as searchReducer from './search'
 import * as couponReducer from './coupon'
-import * as homeReducer from './home'
+import * as homeReducer from './common'
 import * as merchantReducer from './merchant'
 
 export default combineReducers(Object.assign(
-    navigationReducer,
+    searchReducer,
     couponReducer,
     homeReducer,
     merchantReducer

@@ -4,6 +4,7 @@ import {bindActionCreators} from "redux";
 import {ActionCreators} from "../../actions/index";
 import {connect} from "react-redux";
 import _ from 'lodash';
+import * as types from '../../actions/types';
 import CouponTab from "../../components/CouponTab";
 import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 
@@ -16,7 +17,7 @@ class ExpiringCoupons extends Component {
 
     componentDidMount() {
         this.props.setActivityStatus(true);
-        this.props.getExpiringCoupons();
+        this.props.getCouponsByType(types.SET_EXPIRING_COUPONS);
     }
 
     render() {

@@ -6,11 +6,10 @@ import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
 import SiteActivityIndicator from "../components/SiteActivityIndicator";
 import HeaderRight from "../components/HeaderRight";
-import {List, ListItem} from 'react-native-elements'
-import _ from 'lodash';
+import {List, ListItem} from 'react-native-elements';
 import commonStyles, {styleVariables} from '../common/styles';
 import * as util from '../common/helperFuntions';
-
+import _ from 'lodash';
 class Category extends Component {
 
     static navigationOptions = {

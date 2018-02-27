@@ -1,7 +1,7 @@
 import React from 'react';
 import options from '../config/options';
 import moment from 'moment';
-import * as constant from '../constants';
+import * as types from "../actions/types";
 
 const querystring = require('querystring');
 
@@ -88,22 +88,23 @@ const ApiHelper = {
             .then((responseJson) => responseJson);
     },
 
-    getCoupons(accessToken, segment, page = 1, limit = 20) {
+    getCoupons(accessToken, storeType, page = 1, limit = 20) {
         let endPoint;
 
-        switch (segment) {
-            case constant.POPULAR_COUPONS:
+        switch (storeType) {
+            case types.SET_POPULAR_COUPONS:
                 endPoint = `/voucher?sort=+is_expired,-popularity&per_page=${limit}&page=${page}`;
                 break;
-            case constant.FEATURED_COUPONS:
+            case types.SET_FEATURED_COUPONS:
                 endPoint = `/voucher?sort=-is_exclusive,-is_featured&filter=is_expired=false&per_page=${limit}&page=${page}`;
                 break;
-            case constant.TOP_COUPONS:
+            case types.SET_TOP_COUPONS:
                 endPoint = `/voucher?sort=-discount&filter=is_expired=false&per_page=${limit}&page==${page}`;
                 break;
-            case constant.EXPIRING_COUPONS:
+            case types.SET_EXPIRING_COUPONS:
                 endPoint = `/voucher?sort=+is_expired,+end_at,-created_at&filter=end_at=null<>&per_page=${limit}&page=${page}`;
                 break;
+            case types.SET_LATEST_COUPONS:
             default:
                 endPoint = `/voucher?sort=-created_at&filter=is_expired=false&per_page=${limit}&page=${page}`;
         }

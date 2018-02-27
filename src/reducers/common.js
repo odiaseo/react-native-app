@@ -2,6 +2,21 @@ import createReducer from "../common/createReducer";
 import * as types from "../actions/types";
 import options from '../config/options'
 
+export const errorMessage = createReducer("", {
+
+    [types.API_FETCH_FAILED](state, action) {
+        return action.message;
+    }
+});
+
+export const refreshStatus = createReducer({}, {
+    [types.SET_REFRESH_STATUS](state, action) {
+        return {
+            isRefreshing: action.isRefreshing
+        }
+    }
+});
+
 export const accessToken = createReducer("", {
 
     [types.SET_ACCESS_TOKEN](state, action) {

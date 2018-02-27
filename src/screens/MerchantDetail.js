@@ -62,13 +62,13 @@ class MerchantDetail extends Component {
             <View>
                 <Text style={styles.merchantTitle}>
                     {
-                        this.props.merchant.category.title + ' ' + util.renderOfferCount(this.props.merchant.category.stats.voucher_count, true)
+                       // this.props.merchant.category.title + ' ' + util.renderOfferCount(this.props.merchant.category.stats.voucher_count, true)
                     }
                 </Text>
                 <Rating
                     type="star"
                     fractions={1}
-                    startingValue={this.props.merchant.stats.popularity}
+                    startingValue={9}
                     readonly={true}
                     imageSize={13}
                     style={{paddingVertical: 10}}
@@ -85,6 +85,7 @@ class MerchantDetail extends Component {
 
     render() {
         let tempData = this.props.navigation.state.params.tempData;
+
         return (
 
             <View style={styles.container}>

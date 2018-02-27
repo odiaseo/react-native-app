@@ -65,20 +65,6 @@ export const categories = createReducer({}, {
     },
 });
 
-export const refreshStatus = createReducer({}, {
-    [types.SET_REFRESH_STATUS](state, action) {
-        return {
-            isRefreshing: action.isRefreshing,
-        }
-    }
-});
-
-export const searchTerm = createReducer({}, {
-    [types.SET_SEARCH_TERM](state, action) {
-        return action.keyword;
-    }
-});
-
 export const categoryOffers = createReducer({}, {
     [types.SET_CATEGORY_OFFERS](state, action) {
 
