@@ -5,7 +5,13 @@ import _ from "lodash";
 export const categoryOffers = createReducer({}, {
     [types.SET_CATEGORY_OFFERS](state, action) {
 
-        return formatCategoryOffers(action.categories, action.result);
+        return formatCategoryOffers(action.mainCategories, action.result);
+    }
+});
+
+export const mainCategories = createReducer({}, {
+    [types.SET_MAIN_CATEGORIES](state, action) {
+        return action.result;
     }
 });
 
@@ -28,16 +34,14 @@ export const categories = createReducer({}, {
     },
 });
 
-const formatCategoryOffers = function (categories, offers) {
+const formatCategoryOffers = function (mainCategories, offers) {
     const sections = [];
 
-    _.forEach(offers, (items, categoryId) => {
-        if (1 !== categoryId && categories.hasOwnProperty(categoryId)) {
-            sections.push({
-                title: categories[categoryId].title,
-                data: items
-            });
-        }
+    _.forEach(mainCategories, (category) => {
+        sections.push({
+            title: category.title,
+            data: offers[category.id]
+        });
     });
 
     return sections;

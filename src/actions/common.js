@@ -27,20 +27,6 @@ export function getCouponsByType(type, page = 1) {
     };
 }
 
-export function getCategories() {
-    return {
-        type: types.LIST_CATEGORIES
-    };
-}
-
-export function getCategoryCarouselOffers(categoryIdList = []) {
-    return {
-        type: types.GET_CATEGORY_OFFERS,
-        categoryIdList
-    };
-}
-
-
 export function setActivityStatus(status) {
     return {
         type: types.SET_REFRESH_STATUS,

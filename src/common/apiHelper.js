@@ -8,18 +8,20 @@ const querystring = require("querystring");
 
 const call = function (endPoint, token = "", body = null, method = "GET") {
 
+    let headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+    };
+
+    if (token) {
+        headers.Authorization = "Bearer " + token;
+    }
+
     const instance = axios.create({
         baseURL: options.apiUrl,
         timeout: 1000,
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        }
+        headers
     });
-
-    if (token) {
-        instance.headers.Authorization = "Bearer " + token;
-    }
 
     const params = {
         mode: "no-cors",
@@ -52,8 +54,14 @@ const ApiHelper = {
             });
     },
 
-    listCategories(accessToken) {
-        return call("/site-category", accessToken)
+    listCategories(accessToken, level = null) {
+        let endPoint = "/site-category";
+
+        if (level !== null) {
+            endPoint += "?level=" + level;
+        }
+
+        return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
     },
 
@@ -124,7 +132,7 @@ const ApiHelper = {
             .then((responseJson) => responseJson);
     },
 
-    getCategoryOffers() {
+    getCategoryOffers(accessToken, list) {
         const offer = {
             "id": 103047,
             "title": "Reservation]Red Velvet[IRENE]-Photocard",
@@ -208,13 +216,10 @@ const ApiHelper = {
             }
         };
 
-        return {
-            "2": [offer, offer, offer, offer, offer, offer],
-            "84": [offer, offer, offer],
-            "107": [offer, offer, offer, offer, offer, offer],
-            "319": [offer, offer, offer, offer, offer, offer],
-        };
+        let sections = {};
+        list.map((id) => sections[[id]] = [offer, offer, offer, offer, offer, offer]);
 
+        return sections;
     }
 };
 

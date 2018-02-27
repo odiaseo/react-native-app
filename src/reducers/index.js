@@ -3,7 +3,7 @@ import * as searchReducer from "./search";
 import * as couponReducer from "./coupon";
 import * as homeReducer from "./common";
 import * as merchantReducer from "./merchant";
-import * as categoryReducer from "./merchant";
+import * as categoryReducer from "./category";
 
 export default combineReducers(Object.assign(
     searchReducer,

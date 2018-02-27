@@ -22,17 +22,25 @@ export function* getCategories() {
 
 export function* getCategoryCarouselOffers(action) {
     try {
-        const categories = yield select(selectors.getCategories);
         const token = yield select(selectors.getAccessToken);
-        const resp = yield call(apiHelper.getCategoryOffers, token, action.categoryIdList);
-        yield put({type: types.SET_CATEGORY_OFFERS, result: resp, categories});
+        const mainCategories = yield call(apiHelper.listCategories, token, 1);
+        let categoryIdList = mainCategories.map(a => a.id);
+        const resp = yield call(apiHelper.getCategoryOffers, token, categoryIdList);
+        yield put({type: types.SET_CATEGORY_OFFERS, result: resp ,mainCategories});
     } catch (e) {
         yield put({type: types.API_FETCH_FAILED, message: e.message});
     }
 }
 
+export function* requestCategories() {
+    const token = yield select(selectors.getAccessToken);
+    const categories = yield call(apiHelper.listCategories, token, 1);
+    yield put({type: types.SET_MAIN_CATEGORIES, result: categories});
+}
+
 const categoryWatcherSagas = [
     takeEvery(types.LIST_CATEGORIES, getCategories),
+    takeEvery(types.GET_MAIN_CATEGORIES, requestCategories),
     takeEvery(types.GET_CATEGORY_OFFERS, getCategoryCarouselOffers)
 ];
 

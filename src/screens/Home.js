@@ -19,6 +19,10 @@ class Home extends Component {
         header: null
     };
 
+    componentDidMount() {
+        this.props.getCategoryCarouselOffers();
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -47,6 +51,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateTopProps(state) {
     return {
         showLoading: state.refreshStatus.isRefreshing,
+        categories: state.categories,
         categoryOffers: _.isArray(state.categoryOffers) ? state.categoryOffers : [],
     };
 }
