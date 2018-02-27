@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import TabBar from '../components/navigation/TabBar';
-import commonStyles from '../common/styles';
+import React, {Component} from "react";
+import {StyleSheet, Text, View} from "react-native";
+import TabBar from "../components/navigation/TabBar";
+import commonStyles from "../common/styles";
 
 export default class Login extends Component {
     render() {
@@ -11,6 +11,6 @@ export default class Login extends Component {
                 <TabBar {...this.props}/>
             </View>
 
-        )
+        );
     }
 }

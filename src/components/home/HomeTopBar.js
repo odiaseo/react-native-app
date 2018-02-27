@@ -1,19 +1,19 @@
-import React, {Component} from 'react'
-import {StyleSheet, View} from 'react-native'
-import Logo from '../Logo'
-import HeaderRight from '../HeaderRight';
+import React from "react";
+import {StyleSheet, View} from "react-native";
+import Logo from "../Logo";
+import HeaderRight from "../HeaderRight";
 import {styleVariables} from "../../common/styles";
 
-export default class HomeTopBar extends Component {
-    render() {
+const HomeTopBar = function() {
         return (
             <View style={styles.navBar}>
                 <Logo/>
                 <HeaderRight />
             </View>
-        )
-    }
-}
+        );
+};
+
+export default   HomeTopBar;
 
 const styles = StyleSheet.create(
     {
@@ -21,9 +21,9 @@ const styles = StyleSheet.create(
             height: 60,
             paddingTop:10,
             backgroundColor: styleVariables.headerBackgroundColor,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between"
         }
     }
 );

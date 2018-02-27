@@ -1,67 +1,65 @@
-import React from 'react';
-import options from '../config/options';
-import moment from 'moment';
+import React from "react";
+import options from "../config/options";
+import moment from "moment";
 import * as types from "../actions/types";
+import axios from "axios";
 
-const querystring = require('querystring');
+const querystring = require("querystring");
 
-const call = function (endPoint, token = "", body = null, method = 'GET') {
+const call = function (endPoint, token = "", body = null, method = "GET") {
 
-    let url = options.apiUrl + endPoint;
-
-    let headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-    };
+    const instance = axios.create({
+        baseURL: options.apiUrl,
+        timeout: 1000,
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    });
 
     if (token) {
-        headers.Authorization = 'Bearer ' + token;
+        instance.headers.Authorization = "Bearer " + token;
     }
 
-    let params = {
-        mode: 'no-cors',
+    const params = {
+        mode: "no-cors",
         method: method,
-        headers: headers
+        url: endPoint
     };
 
     if (body) {
-        params.body = body;
+        params.data = body;
     }
 
-    return fetch(url, params)
-        .then((response) => {
-            return response.json();
-        })
-        .catch((error) => {
-            console.error(error);
+    return instance(params)
+        .then((responseJson) => {
+            return responseJson.data;
         });
 };
 
 const ApiHelper = {
-    getAccessToken() {
-        let body = JSON.stringify({
-            'client_id': options.clientId,
-            'client_secret': options.clientSecret,
-            'grant_type': 'client_credentials'
-        });
 
-        return call('/oauth/token', '', body, 'POST')
-            .then((responseJson) => {
-                return responseJson.access_token;
-            })
+    requestAccessToken() {
+        const body = {
+            client_id: options.clientId,
+            client_secret: options.clientSecret,
+            grant_type: "client_credentials"
+        };
+
+        return call("/oauth/token", "", body, "POST")
             .catch((error) => {
                 console.error(error);
             });
     },
 
     listCategories(accessToken) {
-        return call('/site-category', accessToken)
+        return call("/site-category", accessToken)
             .then((responseJson) => responseJson);
     },
 
     getMerchantById(accessToken, merchantId) {
 
-        let endPoint = `/merchant/${merchantId}`;
+        const endPoint = `/merchant/${merchantId}`;
 
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
@@ -69,19 +67,19 @@ const ApiHelper = {
 
 
     getMerchants(accessToken, keyword, page, limit = 20) {
-        let params = {
-            unique_field: 'title',
-            fields: ['id', 'title', 'logo', 'voucher_count', 'is_featured', 'is_exclusive'].join(','),
-            filters: ['has_logo=true', 'is_active=true'].join(','),
-            keyword: keyword,
-            page: page,
+        const params = {
+            unique_field: "title",
+            fields: ["id", "title", "logo", "voucher_count", "is_featured", "is_exclusive"].join(","),
+            filters: ["has_logo=true", "is_active=true"].join(","),
+            keyword,
+            page,
             per_page: limit
         };
 
-        let queryString = querystring.stringify(params);
+        const queryString = querystring.stringify(params);
 
         //let endPoint = `/search/merchant?filter=is_active=true,is_profitable=true,has_logo=true,&per_page=${limit}&page=${page}&keyword=${keyword}`;
-        let endPoint = `/type-ahead/merchant?${queryString}`;
+        const endPoint = `/type-ahead/merchant?${queryString}`;
         console.log(endPoint);
 
         return call(endPoint, accessToken)
@@ -114,20 +112,20 @@ const ApiHelper = {
     },
 
     getCarouselSlides(accessToken) {
-        let today = moment().format('YYYY-MM-DD');
-        let endPoint = `/slide?filters=is_active=true,end_at=${today}>`;
+        const today = moment().format("YYYY-MM-DD");
+        const endPoint = `/slide?filters=is_active=true,end_at=${today}>`;
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
     },
 
     searchCoupons(accessToken, searchTerm, page = 1, limit = 20) {
-        let endPoint = `/search/voucher?per_page=${limit}&keyword=${searchTerm}&page=${page}`;
+        const endPoint = `/search/voucher?per_page=${limit}&keyword=${searchTerm}&page=${page}`;
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
     },
 
     getCategoryOffers() {
-        let offer = {
+        const offer = {
             "id": 103047,
             "title": "Reservation]Red Velvet[IRENE]-Photocard",
             "site_id": 37,
@@ -211,10 +209,10 @@ const ApiHelper = {
         };
 
         return {
-            '2': [offer, offer, offer, offer, offer, offer],
-            '84': [offer, offer, offer],
-            '107': [offer, offer, offer, offer, offer, offer],
-            '319': [offer, offer, offer, offer, offer, offer],
+            "2": [offer, offer, offer, offer, offer, offer],
+            "84": [offer, offer, offer],
+            "107": [offer, offer, offer, offer, offer, offer],
+            "319": [offer, offer, offer, offer, offer, offer],
         };
 
     }

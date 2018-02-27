@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
-import {StyleSheet, View, Text} from 'react-native'
+import React, {Component} from "react";
+import {StyleSheet, View, Text} from "react-native";
 import {styleVariables} from "../../common/styles";
-import {Tile} from 'react-native-elements';
-import {renderOfferCount} from '../../common/helperFuntions';
+import {Tile} from "react-native-elements";
+import {renderOfferCount} from "../../common/helperFuntions";
 
 
 export default class CouponThumbnail extends Component {
@@ -19,7 +19,7 @@ export default class CouponThumbnail extends Component {
                 imageContainerStyle={styles.image}
                 contentContainerStyle={styles.contentContainer}
                 imageSrc={{uri: this.props.coupon.merchant.logo}}
-                icon={{name: 'play-circle', type: 'font-awesome'}}>
+                icon={{name: "play-circle", type: "font-awesome"}}>
                 <View style={styles.textContainer}>
                     <Text numberOfLines={1} style={styles.subText}>{this.props.coupon.merchant.title}</Text>
                     <Text style={styles.subText}>
@@ -29,17 +29,17 @@ export default class CouponThumbnail extends Component {
             </Tile>
         );
     }
-};
+}
 
 const styles = StyleSheet.create(
     {
         tileContainer: {
             flex: 1,
-            flexDirection: 'column',
+            flexDirection: "column",
             borderWidth: 1,
             borderColor: styleVariables.borderColor,
             marginRight: 10,
-            backgroundColor: 'white',
+            backgroundColor: "white",
             elevation: 3,
             borderRadius: 10,
         },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create(
         },
 
         mainText: {
-            fontSize: 12, justifyContent: 'center', alignSelf: "stretch"
+            fontSize: 12, justifyContent: "center", alignSelf: "stretch"
 
         },
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create(
         },
 
         textContainer: {
-            flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignContent: 'flex-end'
+            flex: 1, flexDirection: "row", justifyContent: "space-between", alignContent: "flex-end"
         },
         sliderWrapper: {
             backgroundColor: styleVariables.lightBackgroundColor
@@ -72,13 +72,13 @@ const styles = StyleSheet.create(
         slideHeader: {
             flex: 1,
             paddingHorizontal: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginTop: 15,
             marginBottom: 5,
         },
         slideTitle: {
-            fontWeight: 'bold',
+            fontWeight: "bold",
         },
 
         image: {
@@ -92,9 +92,9 @@ const styles = StyleSheet.create(
             height: 60,
             paddingTop: 10,
             backgroundColor: styleVariables.headerBackgroundColor,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between"
         }
     }
 );

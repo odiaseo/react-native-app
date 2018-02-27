@@ -1,12 +1,12 @@
 import moment from "moment/moment";
 import {styleVariables} from "./styles";
-import numeral from 'numeral';
+import numeral from "numeral";
 
 export function renderExpiryDate(coupon) {
     if (coupon.end_at) {
-        return moment(coupon.end_at).format('Do MMM');
+        return moment(coupon.end_at).format("Do MMM");
     }
-    return 'While stock last';
+    return "While stock last";
 }
 
 
@@ -15,31 +15,31 @@ export function renderOfferCount(count, wrap = false) {
         return null;
     }
 
-    let value = numeral(count).format('0,0') + ' offers';
+    const value = numeral(count).format("0,0") + " offers";
 
     if (wrap) {
-        return ' (' + value + ')';
+        return " (" + value + ")";
     }
 
     return value;
 }
 
 export function getIconName(text) {
-    return 'shopping-cart';
+    return "shopping-cart";
 
-    let classname = text.split(' ').reverse()[0];
-    classname = classname.replace('ti-', '').replace('fa-', '');
+    let classname = text.split(" ").reverse()[0];
+    classname = classname.replace("ti-", "").replace("fa-", "");
 
-    return classname ? classname : 'shopping-cart';
+    return classname || "shopping-cart";
 }
 
 export function renderOfferType(coupon) {
     switch (coupon.offer_type.slug) {
-        case 'deal':
+        case "deal":
             return styleVariables.dealColor;
-        case 'coupon':
+        case "coupon":
             return styleVariables.couponColor;
-        case 'sale':
+        case "sale":
             return styleVariables.saleColor;
         default:
             return styleVariables.deliveryColor;

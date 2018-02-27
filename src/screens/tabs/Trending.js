@@ -1,17 +1,17 @@
-import React, {Component} from 'react'
+import React, {Component} from "react";
 import HeaderRight from "../../components/HeaderRight";
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../../actions/index";
 import {connect} from "react-redux";
-import _ from 'lodash';
+import _ from "lodash";
 import CouponTab from "../../components/CouponTab";
 import SiteActivityIndicator from "../../components/SiteActivityIndicator";
-import * as types from '../../actions/types';
+import * as types from "../../actions/types";
 
 class Trending extends Component {
 
     static navigationOptions = {
-        title: 'LATEST',
+        title: "LATEST",
         headerRight: (<HeaderRight searchPage="CouponSearch"/>)
     };
 
@@ -26,7 +26,7 @@ class Trending extends Component {
                 <SiteActivityIndicator/>
             );
         }
-        return (<CouponTab {...this.props}/>)
+        return (<CouponTab {...this.props}/>);
     }
 }
 

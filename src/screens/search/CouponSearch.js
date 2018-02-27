@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import TopBar from '../../components/TopBar';
-import TabBar from '../../components/navigation/TabBar';
+import React, {Component} from "react";
+import {StyleSheet, View} from "react-native";
+import TopBar from "../../components/TopBar";
+import TabBar from "../../components/navigation/TabBar";
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../../actions/index";
 import {connect} from "react-redux";
-import _ from 'lodash';
+import _ from "lodash";
 import CouponList from "../../components/CouponList";
 import {styleVariables} from "../../common/styles";
 import {SEARCH_COUPON} from "../../constants";
@@ -13,7 +13,7 @@ import {SEARCH_COUPON} from "../../constants";
 class CouponSearch extends Component {
 
     static navigationOptions = {
-        title: 'COUPON SEARCH',
+        title: "COUPON SEARCH",
     };
 
     render() {

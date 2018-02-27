@@ -1,30 +1,30 @@
-import React, {Component} from 'react'
-import {StyleSheet, Image, TouchableOpacity, FlatList, Text, View} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import VideoItem from './VideoItem'
+import React, {Component} from "react";
+import {StyleSheet, Image, TouchableOpacity, FlatList, Text, View} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import VideoItem from "./VideoItem";
 
-const logo = require('./images/youtube.png')
+const logo = require("./images/youtube.png");
 
 export default class YouTubeUi extends Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       videos: []
-    }
+    };
   }
 
   _getVideoList () {
     fetch(
-      'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&key=AIzaSyB_8gvXxxrlxsj6lcPz_sBPqsqrMWSQcAo'
+      "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&key=AIzaSyB_8gvXxxrlxsj6lcPz_sBPqsqrMWSQcAo"
     ).then((response) => response.json())
       .then((responseJson) => this.setState({videos: responseJson}))
       .catch((error) => {
-        console.error(error)
-      })
+        console.error(error);
+      });
   }
 
   componentDidMount () {
-    this._getVideoList()
+    this._getVideoList();
   }
 
   render () {
@@ -70,7 +70,7 @@ export default class YouTubeUi extends Component {
           </TouchableOpacity>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -84,45 +84,45 @@ const styles = StyleSheet.create(
     },
     navBar: {
       height: 55,
-      backgroundColor: 'white',
+      backgroundColor: "white",
       elevation: 3,
       paddingHorizontal: 15,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between'
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between"
     },
     logo: {
       height: 22,
       width: 98
     },
     rightNav: {
-      flexDirection: 'row'
+      flexDirection: "row"
     },
 
     navItem: {
       marginLeft: 25
     },
     tabBar: {
-      backgroundColor: 'white',
+      backgroundColor: "white",
       height: 60,
       borderTopWidth: 0.5,
-      borderColor: '#E5E5E5',
-      flexDirection: 'row',
-      justifyContent: 'space-around'
+      borderColor: "#E5E5E5",
+      flexDirection: "row",
+      justifyContent: "space-around"
     },
     tabItem: {
-      alignItems: 'center',
-      justifyContent: 'center'
+      alignItems: "center",
+      justifyContent: "center"
     },
     tabTitle: {
       fontSize: 11,
-      color: '#3C3C3C',
+      color: "#3C3C3C",
       paddingTop: 3
     },
 
     separator: {
-      backgroundColor: '#00ff00',
+      backgroundColor: "#00ff00",
       height: 2
     }
   }
-)
+);

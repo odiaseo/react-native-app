@@ -18,10 +18,10 @@ storeMerchants = function (state, action) {
         return state;
     }
 
-    let items = {};
+    const items = {};
 
     action.result.data.forEach((merchant) => {
-        items[merchant.id] = merchant
+        items[merchant.id] = merchant;
     });
 
     return items;

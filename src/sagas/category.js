@@ -1,7 +1,8 @@
-import * as types from '../actions/types';
+import * as types from "../actions/types";
 import apiHelper from "../common/apiHelper";
-import * as selectors from './selectors';
-import {call, put, takeEvery, select} from 'redux-saga/effects';
+import * as selectors from "./selectors";
+import {call, put, takeEvery, select} from "redux-saga/effects";
+import _ from "lodash";
 
 export function* getCategories() {
     try {
@@ -24,9 +25,8 @@ export function* getCategoryCarouselOffers(action) {
         const categories = yield select(selectors.getCategories);
         const token = yield select(selectors.getAccessToken);
         const resp = yield call(apiHelper.getCategoryOffers, token, action.categoryIdList);
-        yield put({type: types.SET_CATEGORY_OFFERS, result: resp, categories: categories});
+        yield put({type: types.SET_CATEGORY_OFFERS, result: resp, categories});
     } catch (e) {
-        console.log(ex);
         yield put({type: types.API_FETCH_FAILED, message: e.message});
     }
 }

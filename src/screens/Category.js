@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
-import TabBar from '../components/navigation/TabBar';
+import React, {Component} from "react";
+import {StyleSheet, View, ScrollView} from "react-native";
+import TabBar from "../components/navigation/TabBar";
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
 import SiteActivityIndicator from "../components/SiteActivityIndicator";
 import HeaderRight from "../components/HeaderRight";
-import {List, ListItem} from 'react-native-elements';
-import commonStyles, {styleVariables} from '../common/styles';
-import * as util from '../common/helperFuntions';
-import _ from 'lodash';
+import {List, ListItem} from "react-native-elements";
+import commonStyles, {styleVariables} from "../common/styles";
+import * as util from "../common/helperFuntions";
+import _ from "lodash";
 class Category extends Component {
 
     static navigationOptions = {
-        title: 'CATEGORIES',
+        title: "CATEGORIES",
         headerRight: (<HeaderRight/>),
     };
 
@@ -31,7 +31,7 @@ class Category extends Component {
             );
         }
 
-        let list = this.props.categories;
+        const list = this.props.categories;
 
         return (
             <ScrollView>
@@ -39,11 +39,11 @@ class Category extends Component {
                     {
                         list.map((category, index) => (
                             <ListItem
-                                leftIcon={{name: util.getIconName(category.icon_class_name), type: 'font-awesome'}}
+                                leftIcon={{name: util.getIconName(category.icon_class_name), type: "font-awesome"}}
                                 key={index}
                                 subtitle={util.renderOfferCount(category.stats.voucher_count)}
                                 titleStyle={{fontSize: styleVariables.mainTextFontSize}}
-                                subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: 'normal'}}
+                                subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: "normal"}}
                                 containerStyle={{borderBottomColor: styleVariables.borderColor, marginTop: 0}}
                                 title={category.title}
                             />
@@ -81,14 +81,14 @@ const styles = StyleSheet.create(
     {
         container: {
             flex: 1,
-            backgroundColor: '#ffffff'
+            backgroundColor: "#ffffff"
         },
         body: {
             flex: 1
         },
         divider: {
             borderTopWidth: 0.5,
-            borderColor: '#3e3e3e',
+            borderColor: "#3e3e3e",
             height: 2
         }
     }

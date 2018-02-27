@@ -1,8 +1,8 @@
 import * as types from "../actions/types";
 import apiHelper from "../common/apiHelper";
 import {setFoundResults, setRefreshStatus} from "./coupon";
-import * as selectors from './selectors';
-import {call, put, takeEvery, takeLatest, select} from 'redux-saga/effects';
+import * as selectors from "./selectors";
+import {call, put, takeEvery, takeLatest, select} from "redux-saga/effects";
 
 
 function* findMerchantsByKeyword(action) {

@@ -1,12 +1,12 @@
-import React, {Component} from 'react'
-import {StyleSheet, View, Keyboard} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import {SearchBar} from 'react-native-elements';
+import React, {Component} from "react";
+import {StyleSheet, View, Keyboard} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import {SearchBar} from "react-native-elements";
 import {ActionCreators} from "../actions/index";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import _ from 'lodash';
-import Touchable from 'react-native-platform-touchable';
+import _ from "lodash";
+import Touchable from "react-native-platform-touchable";
 import {styleVariables} from "../common/styles";
 
 class HeaderSearchBar extends Component {
@@ -27,7 +27,7 @@ class HeaderSearchBar extends Component {
     }
 
     componentDidMount() {
-        this.searchRef.focus()
+        this.searchRef.focus();
     }
 
     render() {
@@ -36,20 +36,20 @@ class HeaderSearchBar extends Component {
                 <SearchBar
                     round
                     ref={(search) => {
-                        this.searchRef = search
+                        this.searchRef = search;
                     }}
                     showLoadingIcon={false}
                     placeholder='Enter keyword ...'
                     inputStyle={styles.searchBar}
                     containerStyle={styles.searchContainer}
-                    autoCapitalize={'none'}
+                    autoCapitalize={"none"}
                     icon={{style: styles.iconStyle}}
                     loadingIcon={{style: styles.iconStyle}}
                     clearIcon={{style: styles.iconStyle, color: styleVariables.headerColor}}
                     onChangeText={(text) => this.onChangeTextDelayed(text)}
                 />
             </View>
-        )
+        );
     }
 }
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create(
             margin: 0,
             marginTop: 0,
             paddingTop: 0,
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
             borderTopWidth: 0,
             borderBottomWidth: 0
         },
@@ -83,15 +83,15 @@ const styles = StyleSheet.create(
         },
         navBar: {
             flex:1,
-            backgroundColor: '#25282e',
+            backgroundColor: "#25282e",
             paddingHorizontal: 0,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between"
         },
 
         searchBar: {
-            borderColor: '#25282e',
+            borderColor: "#25282e",
             fontSize: 12,
             marginTop: 0,
         },

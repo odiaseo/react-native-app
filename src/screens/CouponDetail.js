@@ -1,24 +1,24 @@
-import React, {Component} from 'react'
-import {StyleSheet, Image, Linking, View, ScrollView} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import TabBar from '../components/navigation/TabBar';
+import React, {Component} from "react";
+import {StyleSheet, Image, Linking, View, ScrollView} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import TabBar from "../components/navigation/TabBar";
 import {styleVariables} from "../common/styles";
-import {Text, Button, Rating} from 'react-native-elements'
-import HeaderRight from '../components/HeaderRight';
-import * as util from '../common/helperFuntions';
+import {Text, Button, Rating} from "react-native-elements";
+import HeaderRight from "../components/HeaderRight";
+import * as util from "../common/helperFuntions";
 import AboutSection from "../components/AboutSection";
-import Touchable from 'react-native-platform-touchable';
+import Touchable from "react-native-platform-touchable";
 
 export default class CouponDetail extends Component {
 
     static navigationOptions = {
-        title: 'DEAL',
+        title: "DEAL",
         headerRight: (<HeaderRight/>)
     };
 
     openExternalLink() {
         Linking.openURL(this.coupon.outlink)
-            .catch(err => console.error('An error occurred', err));
+            .catch(err => console.error("An error occurred", err));
     }
 
     render() {
@@ -33,19 +33,19 @@ export default class CouponDetail extends Component {
                             <Touchable
                                 style={styles.details}
                                 hitSlop={styleVariables.hitSlop}
-                                onPress={() => this.props.navigation.navigate('MerchantDetail', {tempData: this.coupon.merchant})}>
+                                onPress={() => this.props.navigation.navigate("MerchantDetail", {tempData: this.coupon.merchant})}>
                                 <View>
                                     <Text style={styles.offerTitle}>{this.coupon.title}</Text>
                                     <Text style={styles.merchantTitle}>
                                         {
-                                            this.coupon.merchant.title + ' ' + util.renderOfferCount(this.coupon.merchant.stats.voucher_count, true)
+                                            this.coupon.merchant.title + " " + util.renderOfferCount(this.coupon.merchant.stats.voucher_count, true)
                                         }
                                     </Text>
                                     <Rating
                                         type="star"
                                         fractions={1}
                                         startingValue={this.coupon.merchant.stats.popularity}
-                                        readonly={true}
+                                        readonly
                                         imageSize={13}
                                         style={{paddingVertical: 10}}
                                     />
@@ -79,16 +79,16 @@ export default class CouponDetail extends Component {
                         <View style={{flex: 1}}>
                             <Button
                                 backgroundColor={styleVariables.dealColor}
-                                iconRight={{name: 'shopping-cart'}}
+                                iconRight={{name: "shopping-cart"}}
                                 onPress={this.openExternalLink.bind(this)}
-                                containerViewStyle={{marginTop: 60, alignContent: 'stretch'}}
+                                containerViewStyle={{marginTop: 60, alignContent: "stretch"}}
                                 title='Get Deal'/>
                         </View>
                     </View>
                 </ScrollView>
                 <TabBar {...this.props}/>
             </View>
-        )
+        );
     }
 }
 
@@ -104,8 +104,8 @@ const styles = StyleSheet.create(
         },
 
         rowItems: {
-            flexDirection: 'row',
-            alignContent: 'center',
+            flexDirection: "row",
+            alignContent: "center",
             paddingHorizontal: 20,
             paddingVertical: 10,
             borderBottomWidth: 1,
@@ -122,18 +122,18 @@ const styles = StyleSheet.create(
             height: 90,
             borderWidth: 1,
             marginRight: 10,
-            borderColor: '#cccccc',
+            borderColor: "#cccccc",
         },
         detailsWrapper: {
-            flexDirection: 'row',
-            alignContent: 'center',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            alignContent: "center",
+            justifyContent: "space-between",
             padding: 20,
         },
 
         details: {
             flex: 1,
-            alignItems: 'flex-start',
+            alignItems: "flex-start",
         },
 
         offerTitle: {

@@ -1,6 +1,6 @@
 import createReducer from "../common/createReducer";
 import * as types from "../actions/types";
-import options from '../config/options'
+import options from "../config/options";
 
 export const errorMessage = createReducer("", {
 
@@ -13,15 +13,15 @@ export const refreshStatus = createReducer({}, {
     [types.SET_REFRESH_STATUS](state, action) {
         return {
             isRefreshing: action.isRefreshing
-        }
+        };
     }
 });
 
 export const accessToken = createReducer("", {
 
     [types.SET_ACCESS_TOKEN](state, action) {
-        if (action.accessToken) {
-            return action.accessToken;
+        if (action.result) {
+            return action.result;
 
         }
         return state;
@@ -32,11 +32,11 @@ export const sliders = createReducer([], {
     [types.SET_FOUND_SLIDES](state, action) {
 
         if (action.result.data) {
-            let items = {};
+            const items = {};
 
             action.result.data.forEach((slide) => {
 
-                let url = options.sliderImageDomain + slide.background_image;
+                const url = options.sliderImageDomain + slide.background_image;
 
                 items[slide.id] = {
                     id: slide.id,

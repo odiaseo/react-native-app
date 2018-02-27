@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {ScrollView} from 'react-native';
+import React, {Component} from "react";
+import {ScrollView} from "react-native";
 import SiteActivityIndicator from "../components/SiteActivityIndicator";
 import commonStyles, {styleVariables} from "../common/styles";
 import {renderOfferCount} from "../common/helperFuntions";
-import {List, ListItem} from 'react-native-elements'
+import {List, ListItem} from "react-native-elements";
 
 export default class CouponList extends Component {
 
@@ -23,7 +23,7 @@ export default class CouponList extends Component {
                             <ListItem
                                 avatar={{uri: coupon.merchant.logo}}
                                 key={coupon.id}
-                                onPress={() => this.props.navigation.navigate('CouponDetail', {coupon: coupon})}
+                                onPress={() => this.props.navigation.navigate("CouponDetail", {coupon})}
                                 subtitle={coupon.merchant.title + renderOfferCount(coupon.merchant.stats.voucher_count, true)}
                                 titleStyle={{fontSize: styleVariables.mainTextFontSize}}
                                 subtitleStyle={commonStyles.listSubTitleText}

@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, FlatList, Text} from 'react-native';
-import TopBar from '../../components/TopBar';
-import TabBar from '../../components/navigation/TabBar';
-import SiteActivityIndicator from '../../components/SiteActivityIndicator';
+import React, {Component} from "react";
+import {StyleSheet, View, FlatList, Text} from "react-native";
+import TopBar from "../../components/TopBar";
+import TabBar from "../../components/navigation/TabBar";
+import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../../actions/index";
 import {connect} from "react-redux";
-import _ from 'lodash';
+import _ from "lodash";
 import commonStyles, {styleVariables} from "../../common/styles";
 import {SEARCH_MERCHANT} from "../../constants";
 import MerchantList from "../../components/MerchantList";
@@ -18,7 +18,7 @@ class MerchantSearch extends Component {
     }
 
     static navigationOptions = {
-        title: 'MERCHANT SEARCH',
+        title: "MERCHANT SEARCH",
     };
 
     render() {

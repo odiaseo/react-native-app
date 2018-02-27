@@ -1,17 +1,17 @@
-import React, {Component} from 'react'
+import React, {Component} from "react";
 import HeaderRight from "../../components/HeaderRight";
 import {bindActionCreators} from "redux";
 import {ActionCreators} from "../../actions/index";
 import {connect} from "react-redux";
-import _ from 'lodash';
-import * as types from '../../actions/types';
+import _ from "lodash";
+import * as types from "../../actions/types";
 import CouponTab from "../../components/CouponTab";
 import SiteActivityIndicator from "../../components/SiteActivityIndicator";
 
 class ExpiringCoupons extends Component {
 
     static navigationOptions = {
-        title: 'EXPIRING',
+        title: "EXPIRING",
         headerRight: (<HeaderRight searchPage="CouponSearch"/>)
     };
 
@@ -27,7 +27,7 @@ class ExpiringCoupons extends Component {
                 <SiteActivityIndicator/>
             );
         }
-        return (<CouponTab {...this.props}/>)
+        return (<CouponTab {...this.props}/>);
     }
 }
 

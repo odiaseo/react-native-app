@@ -1,13 +1,13 @@
-import * as types from '../actions/types';
+import * as types from "../actions/types";
 import apiHelper from "../common/apiHelper";
 import {setRefreshStatus} from "./coupon";
-import * as selectors from './selectors';
-import {call, put, takeEvery, takeLatest, select} from 'redux-saga/effects';
+import * as selectors from "./selectors";
+import {call, put, takeEvery, takeLatest, select} from "redux-saga/effects";
 
 function* getAccessToken() {
     try {
-        const resp = yield call(apiHelper.getAccessToken);
-        yield put({type: types.SET_ACCESS_TOKEN, accessToken: resp});
+        const resp = yield call(apiHelper.requestAccessToken);
+        yield put({type: types.SET_ACCESS_TOKEN, result: resp});
     } catch (e) {
         yield put({type: types.API_FETCH_FAILED, message: e.message});
     }

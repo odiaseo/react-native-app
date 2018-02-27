@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
-import {StyleSheet, Image, Linking, View, ScrollView} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import TabBar from '../components/navigation/TabBar';
+import React, {Component} from "react";
+import {StyleSheet, Image, Linking, View, ScrollView} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import TabBar from "../components/navigation/TabBar";
 import {styleVariables} from "../common/styles";
-import {Text, Button, Rating} from 'react-native-elements'
-import HeaderRight from '../components/HeaderRight';
-import * as util from '../common/helperFuntions';
+import {Text, Button, Rating} from "react-native-elements";
+import HeaderRight from "../components/HeaderRight";
+import * as util from "../common/helperFuntions";
 import AboutSection from "../components/AboutSection";
 import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import _ from 'lodash';
+import _ from "lodash";
 
 class MerchantDetail extends Component {
 
@@ -27,13 +27,13 @@ class MerchantDetail extends Component {
         const {params} = navigation.state;
 
         return {
-            title: params ? params.tempData.title : 'STORE DETAIL',
+            title: params ? params.tempData.title : "STORE DETAIL",
             headerRight: (<HeaderRight/>)
         };
     };
 
     openExternalLink() {
-        Linking.openURL(this.props.merchant.outlink).catch(err => console.error('An error occurred', err));
+        Linking.openURL(this.props.merchant.outlink).catch(err => console.error("An error occurred", err));
     }
 
     renderStoreButton() {
@@ -45,10 +45,10 @@ class MerchantDetail extends Component {
             <View style={{flex: 1}}>
                 <Button
                     backgroundColor={styleVariables.dealColor}
-                    iconRight={{name: 'shopping-cart'}}
+                    iconRight={{name: "shopping-cart"}}
                     onPress={this.openExternalLink.bind(this)}
-                    containerViewStyle={{marginTop: 60, alignContent: 'stretch'}}
-                    title={'Visit ' + this.props.merchant.title}/>
+                    containerViewStyle={{marginTop: 60, alignContent: "stretch"}}
+                    title={"Visit " + this.props.merchant.title}/>
             </View>
         );
     }
@@ -69,7 +69,7 @@ class MerchantDetail extends Component {
                     type="star"
                     fractions={1}
                     startingValue={9}
-                    readonly={true}
+                    readonly
                     imageSize={13}
                     style={{paddingVertical: 10}}
                 />
@@ -84,7 +84,7 @@ class MerchantDetail extends Component {
     }
 
     render() {
-        let tempData = this.props.navigation.state.params.tempData;
+        const tempData = this.props.navigation.state.params.tempData;
 
         return (
 
@@ -123,7 +123,7 @@ class MerchantDetail extends Component {
             </View>
 
 
-        )
+        );
     }
 }
 
@@ -152,8 +152,8 @@ const styles = StyleSheet.create(
         },
 
         rowItems: {
-            flexDirection: 'row',
-            alignContent: 'center',
+            flexDirection: "row",
+            alignContent: "center",
             paddingHorizontal: 20,
             paddingVertical: 10,
             borderBottomWidth: 1,
@@ -170,18 +170,18 @@ const styles = StyleSheet.create(
             height: 90,
             borderWidth: 1,
             marginRight: 10,
-            borderColor: '#cccccc',
+            borderColor: "#cccccc",
         },
         detailsWrapper: {
-            flexDirection: 'row',
-            alignContent: 'center',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            alignContent: "center",
+            justifyContent: "space-between",
             padding: 20,
         },
 
         details: {
             flex: 1,
-            alignItems: 'flex-start',
+            alignItems: "flex-start",
         },
 
         offerTitle: {

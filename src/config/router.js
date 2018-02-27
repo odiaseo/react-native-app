@@ -1,12 +1,12 @@
-import React from 'react';
-import Home from '../screens/Home';
-import Category from '../screens/Category';
-import CouponSearch from '../screens/search/CouponSearch';
-import Login from '../screens/Login';
-import {StackNavigator, DrawerNavigator, TabNavigator} from 'react-navigation'
+import React from "react";
+import Home from "../screens/Home";
+import Category from "../screens/Category";
+import CouponSearch from "../screens/search/CouponSearch";
+import Login from "../screens/Login";
+import {StackNavigator, DrawerNavigator, TabNavigator} from "react-navigation";
 import CouponDetail from "../screens/CouponDetail";
 import MerchantDetail from "../screens/MerchantDetail";
-import {styleVariables} from '../common/styles';
+import {styleVariables} from "../common/styles";
 import Trending from "../screens/tabs/Trending";
 import TopCoupons from "../screens/tabs/TopCoupons";
 import PopularCoupons from "../screens/tabs/PopularCoupons";
@@ -29,7 +29,7 @@ export const TabNav = TabNavigator(
         },
     },
     {
-        tabBarPosition: 'top',
+        tabBarPosition: "top",
         swipeEnabled: true,
         navigationOptions: {
             headerStyle: {
@@ -37,7 +37,7 @@ export const TabNav = TabNavigator(
             },
         },
         tabBarOptions: {
-            initialRouteName: 'Latest',
+            initialRouteName: "Latest",
             activeTintColor: styleVariables.headerColor,
             labelStyle: {
                 fontSize: styleVariables.mainTextFontSize,
@@ -85,7 +85,7 @@ const RootStack = StackNavigator(
         },
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: "Home",
         navigationOptions: {
             headerStyle: {
                 backgroundColor: styleVariables.headerBackgroundColor,
@@ -104,7 +104,7 @@ const RootStack = StackNavigator(
     }
 );
 
-export const DrawerNav = DrawerNavigator(
+export default DrawerNav = DrawerNavigator(
     {
         Stack: {
             screen: RootStack
@@ -117,5 +117,3 @@ export const DrawerNav = DrawerNavigator(
         //drawerBackgroundColor: styleVariables.headerBackgroundColor
     }
 );
-
-export default DrawerNav;

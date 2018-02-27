@@ -1,22 +1,22 @@
-import React, {Component} from 'react'
-import {StyleSheet, Image, View} from 'react-native'
+import React from "react";
+import {StyleSheet, Image, View} from "react-native";
+import image from "../images/kupon-logo.png";
 
-const image = require('../images/kupon-logo.png');
 
-export default class Logo extends Component {
-    render() {
-        return (
-            <View>
-                <Image source={image} style={styles.logo}/>
-            </View>
-        )
-    }
-}
+const Logo = function () {
+    return (
+        <View>
+            <Image source={image} style={styles.logo}/>
+        </View>
+    );
+};
+
+export default Logo;
 
 const styles = StyleSheet.create(
     {
         logo: {
-            marginLeft:10,
+            marginLeft: 10,
             height: 22
         }
     }

@@ -1,20 +1,20 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React from "react";
+import {StyleSheet} from "react-native";
 
 export const styleVariables = {
-    backgroundColor: '#FFFFFF',
-    headerBackgroundColor: '#25282e',
-    headerColor: '#cccccc',
-    subTitleColor: '#888888',
-    lightBackgroundColor: '#eeeeee',
-    grey: '#cccccc',
-    primaryColor: '#ff3300',
-    borderColor: '#eeeeee',
-    dealColor: '#95C05C',
-    couponColor: '#29b6f6',
-    saleColor: '#ec407a',
-    deliveryColor: '#6e8cd7',
-    infoDetailColor: '#455a64',
+    backgroundColor: "#FFFFFF",
+    headerBackgroundColor: "#25282e",
+    headerColor: "#cccccc",
+    subTitleColor: "#888888",
+    lightBackgroundColor: "#eeeeee",
+    grey: "#cccccc",
+    primaryColor: "#ff3300",
+    borderColor: "#eeeeee",
+    dealColor: "#95C05C",
+    couponColor: "#29b6f6",
+    saleColor: "#ec407a",
+    deliveryColor: "#6e8cd7",
+    infoDetailColor: "#455a64",
     mainTextFontSize: 14,
     subtitleFontSize: 12,
     infoTextFontSize: 11,
@@ -30,9 +30,9 @@ export const styleVariables = {
 const commonStyles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
         backgroundColor: styleVariables.backgroundColor,
     },
     merchantLogo: {
@@ -41,44 +41,44 @@ const commonStyles = StyleSheet.create({
     },
     listSubTitleText: {
         fontSize: styleVariables.infoTextFontSize,
-        fontWeight: 'normal',
+        fontWeight: "normal",
         marginTop: 5
     },
     list: {
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: "row"
     },
     horizontal: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        flexDirection: "row",
+        justifyContent: "space-around",
         padding: 10
     },
     vertical: {
-        flexDirection: 'column',
-        justifyContent: 'space-around',
+        flexDirection: "column",
+        justifyContent: "space-around",
     },
     listContent: {
         flex: 1,
-        flexDirection: 'column'
+        flexDirection: "column"
     },
     divider: {
         borderTopWidth: 0.5,
-        borderColor: '#3e3e3e',
+        borderColor: "#3e3e3e",
         height: 2
     },
     row: {
         flex: 1,
         padding: 42,
         borderWidth: 1,
-        alignSelf: 'center',
+        alignSelf: "center",
         fontSize: 24,
-        borderColor: '#DDDDDD'
+        borderColor: "#DDDDDD"
     },
 
     sectionDivider: {
-        alignItems: 'center',
+        alignItems: "center",
         padding: 8,
-        backgroundColor: '#EEEEEE'
+        backgroundColor: "#EEEEEE"
     },
 
     listContainerStyle: {

@@ -1,7 +1,7 @@
-import * as types from '../actions/types';
+import * as types from "../actions/types";
 import apiHelper from "../common/apiHelper";
-import * as selectors from './selectors';
-import {call, put, takeEvery, takeLatest, select} from 'redux-saga/effects';
+import * as selectors from "./selectors";
+import {call, put, takeEvery, takeLatest, select} from "redux-saga/effects";
 
 function* getCouponsSaga(action) {
     try {
