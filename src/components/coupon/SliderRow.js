@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {StyleSheet, View, ScrollView, Text} from "react-native";
-import CouponThumbnail from "./CouponThumbnail";
+import StoreCard from "../StoreCard";
 import {styleVariables} from "../../common/styles";
 import PropTypes from "prop-types";
 
@@ -18,7 +18,7 @@ export default class SliderRow extends Component {
                     horizontal
                     keyboardDismissMode={"on-drag"}
                     maximumZoomScale={3.0}>
-                    {this.props.section.data.map((coupon, index) => <CouponThumbnail key={index} coupon={coupon}/>)}
+                    {this.props.section.data.map((store, index) => <StoreCard key={index} store={store}/>)}
                 </ScrollView>
             </View>
         );

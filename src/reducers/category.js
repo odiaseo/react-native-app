@@ -1,11 +1,9 @@
 import * as types from "../actions/types";
 import createReducer from "../common/createReducer";
-import _ from "lodash";
 
 export const categoryOffers = createReducer({}, {
     [types.SET_CATEGORY_OFFERS](state, action) {
-
-        return formatCategoryOffers(action.mainCategories, action.result);
+        return Object.assign({}, state, action.result);
     }
 });
 
@@ -33,16 +31,3 @@ export const categories = createReducer({}, {
         return items;
     },
 });
-
-const formatCategoryOffers = function (mainCategories, offers) {
-    const sections = [];
-
-    _.forEach(mainCategories, (category) => {
-        sections.push({
-            title: category.title,
-            data: offers[category.id]
-        });
-    });
-
-    return sections;
-};

@@ -5,7 +5,6 @@ import TabBar from "../components/navigation/TabBar";
 import {styleVariables} from "../common/styles";
 import {Text, Button, Rating} from "react-native-elements";
 import HeaderRight from "../components/HeaderRight";
-import * as util from "../common/helperFuntions";
 import AboutSection from "../components/AboutSection";
 import {ActionCreators} from "../actions";
 import {connect} from "react-redux";
@@ -16,6 +15,10 @@ class MerchantDetail extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            enriched: {}
+        };
 
         this.openExternalLink = this.openExternalLink.bind(this);
         this.renderStoreButton = this.renderStoreButton.bind(this);
@@ -32,12 +35,26 @@ class MerchantDetail extends Component {
         };
     };
 
+    componentDidMount() {
+        if (this.props.navigation.state.params.tempData.category) {
+            this.setState({
+                enriched: this.props.navigation.state.params.tempData
+            });
+        } else {
+            this.props.setActivityStatus(true);
+            this.props.findMerchantById(this.props.navigation.state.params.tempData.id);
+            this.setState({
+                enriched: this.props.merchant
+            });
+        }
+    }
+
     openExternalLink() {
         Linking.openURL(this.props.merchant.outlink).catch(err => console.error("An error occurred", err));
     }
 
     renderStoreButton() {
-        if (this.props.showLoading) {
+        if (!this.state.enriched) {
             return null;
         }
 
@@ -48,13 +65,13 @@ class MerchantDetail extends Component {
                     iconRight={{name: "shopping-cart"}}
                     onPress={this.openExternalLink.bind(this)}
                     containerViewStyle={{marginTop: 60, alignContent: "stretch"}}
-                    title={"Visit " + this.props.merchant.title}/>
+                    title={"Visit " + this.state.enriched.title}/>
             </View>
         );
     }
 
     renderCategorySection() {
-        if (this.props.showLoading) {
+        if (this.state.enriched) {
             return null;
         }
 
@@ -62,14 +79,14 @@ class MerchantDetail extends Component {
             <View>
                 <Text style={styles.merchantTitle}>
                     {
-                       // this.props.merchant.category.title + ' ' + util.renderOfferCount(this.props.merchant.category.stats.voucher_count, true)
+                        // this.props.merchant.category.title + ' ' + util.renderOfferCount(this.props.merchant.category.stats.voucher_count, true)
                     }
                 </Text>
                 <Rating
                     type="star"
                     fractions={1}
                     startingValue={9}
-                    readonly
+                    readonly={true}
                     imageSize={13}
                     style={{paddingVertical: 10}}
                 />
@@ -78,13 +95,8 @@ class MerchantDetail extends Component {
         );
     }
 
-    componentDidMount() {
-        this.props.setActivityStatus(true);
-        this.props.findMerchantById(this.props.navigation.state.params.tempData.id);
-    }
-
     render() {
-        const tempData = this.props.navigation.state.params.tempData;
+        let tempData = this.props.navigation.state.params.tempData;
 
         return (
 
@@ -110,9 +122,9 @@ class MerchantDetail extends Component {
                         </View>
 
                         {
-                            !this.props.showLoading && <AboutSection
-                                title={this.props.merchant.title}
-                                description={this.props.merchant.description}
+                            this.state.enriched && <AboutSection
+                                title={this.state.enriched.title}
+                                description={this.state.enriched.description}
                             />
                         }
 

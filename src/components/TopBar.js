@@ -60,11 +60,6 @@ class TopBar extends Component {
     }
 }
 
-TopBar.propTypes = {
-    searchType: PropTypes.string.isRequired,
-    showLoading: PropTypes.boolean,
-};
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(ActionCreators, dispatch);
 }

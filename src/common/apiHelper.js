@@ -3,6 +3,7 @@ import options from "../config/options";
 import moment from "moment";
 import * as types from "../actions/types";
 import axios from "axios";
+import _ from "lodash";
 
 const querystring = require("querystring");
 
@@ -132,92 +133,32 @@ const ApiHelper = {
             .then((responseJson) => responseJson);
     },
 
-    getCategoryOffers(accessToken, list) {
-        const offer = {
-            "id": 103047,
-            "title": "Reservation]Red Velvet[IRENE]-Photocard",
-            "site_id": 37,
-            "discount": "0.0",
-            "voucher_code": "",
-            "popularity": 0,
-            "is_expired": false,
-            "is_featured": false,
-            "is_exclusive": false,
-            "while_stock_last": 1,
-            "end_at": null,
-            "slug": "reservation-red-velvet-irene-photocard",
-            "created_at": "2017-11-28 00:39:20",
-            "discount_type": null,
-            "symbol": null,
-            "is_ending_today": false,
-            "outlink": "https://api.kuponhub.net/redirect/05a3c83d659f21bbe2f66a786676a746d5ec4db4d50c1f4ad0339eba03c096d1/voucher",
-            "offer_type": {
-                "id": 2,
-                "title": "Deals",
-                "slug": "deal"
-            },
-            "merchant": {
-                "id": 189240,
-                "title": "Koreanmall",
-                "description": "",
-                "keywords": "koreanmall, malls, shopping",
-                "logo": "https://www.kuponhub.net/merchants/compressed/png/koreanmall.png",
-                "url": "http://www.koreanmall.com/app",
-                "is_active": true,
-                "is_adult": false,
-                "popularity": 1,
-                "slug": "koreanmall",
-                "voucher_count": 166,
-                "screen_shot": "https://www.kuponhub.net/merchants/screenshot/png/koreanmall.png",
-                "is_profitable": true,
-                "has_logo": true,
-                "has_screen_shot": true,
-                "display_order": 0,
-                "outlink": "https://api.kuponhub.net/redirect/a29yZWFubWFsbC5jb20/merchant",
-                "category": {
-                    "id": 314,
-                    "title": "Home & Garden",
-                    "description": "<p>For all your home and garden equipment and appliances look no further. Products in this category includes white goods like fridge, freezer, cooker, oven and washing machine. Home appliances include living and bedroom furniture, wall fittings, home decor and DIY equipments. For you gardening you can find all you garden furniture, equipment and all you need for pest control.</p>",
-                    "keywords": "garden, furniture, pest control, kitchen, microwave, kettle, oven, office supplies, DIY, fridge, bedroom",
-                    "is_adult": false,
-                    "offer_count": 1910,
-                    "icon_class_name": "icon-picture ti-home",
-                    "slug": "home-garden",
-                    "level": 1,
-                    "path": "home-garden",
-                    "stats": {
-                        "offer_count": 0,
-                        "popularity": 1,
-                        "voucher_count": 1525
-                    }
-                },
-                "stats": {
-                    "offer_count": 0,
-                    "popularity": 0,
-                    "voucher_count": 166
-                }
-            },
-            "category": {
-                "id": 314,
-                "title": "Home & Garden",
-                "description": "<p>For all your home and garden equipment and appliances look no further. Products in this category includes white goods like fridge, freezer, cooker, oven and washing machine. Home appliances include living and bedroom furniture, wall fittings, home decor and DIY equipments. For you gardening you can find all you garden furniture, equipment and all you need for pest control.</p>",
-                "keywords": "garden, furniture, pest control, kitchen, microwave, kettle, oven, office supplies, DIY, fridge, bedroom",
-                "is_adult": false,
-                "offer_count": 1910,
-                "icon_class_name": "icon-picture ti-home",
-                "slug": "home-garden",
-                "level": 1,
-                "path": "home-garden",
-                "stats": {
-                    "offer_count": 0,
-                    "popularity": 1,
-                    "voucher_count": 1525
-                }
-            }
-        };
+    getMerchantsByCategory(accessToken, categoryId, limit = 10) {
+        const endPoint = `/merchant?per_page=${limit}&filters=has_logo=true&category_id=${categoryId}&sort=-is_profitable,-popularity`;
 
+        return call(endPoint, accessToken)
+            .then((merchants) => {
+                return ApiHelper.groupByCategory(merchants.data);
+            }).catch((error) => {
+                console.error(error);
+            });
+    },
+
+    groupByCategory(merchantList) {
         let sections = {};
-        list.map((id) => sections[[id]] = [offer, offer, offer, offer, offer, offer]);
+
+        merchantList.map((merchant) => {
+            let categoryId = merchant.category.id;
+
+            if (!_.has(sections, categoryId)) {
+                sections[categoryId] = {
+                    title: merchant.category.title,
+                    data: []
+                };
+            }
+
+            sections[categoryId]["data"].push(merchant);
+        });
 
         return sections;
     }

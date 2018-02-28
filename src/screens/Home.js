@@ -52,7 +52,7 @@ function mapStateTopProps(state) {
     return {
         showLoading: state.refreshStatus.isRefreshing,
         categories: state.categories,
-        categoryOffers: _.isArray(state.categoryOffers) ? state.categoryOffers : [],
+        categoryOffers: _.isEmpty(state.categoryOffers) ? [] : Object.values(state.categoryOffers),
     };
 }
 

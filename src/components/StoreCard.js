@@ -1,35 +1,46 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Text} from "react-native";
-import {styleVariables} from "../../common/styles";
+import {styleVariables} from "../common/styles";
 import {Tile} from "react-native-elements";
-import {renderOfferCount} from "../../common/helperFuntions";
+import {renderOfferCount} from "../common/helperFuntions";
+import {withNavigation} from "react-navigation";
+import {Rating} from "react-native-elements";
 
-
-export default class CouponThumbnail extends Component {
+class StoreCard extends Component {
     render() {
         return (
             <Tile
                 width={130}
                 height={170}
-                key={this.props.coupon.id}
+                key={this.props.store.id}
                 containerStyle={styles.tileContainer}
-                title={this.props.coupon.title}
+                title={this.props.store.title}
                 titleNumberOfLines={2}
                 titleStyle={styles.mainText}
                 imageContainerStyle={styles.image}
                 contentContainerStyle={styles.contentContainer}
-                imageSrc={{uri: this.props.coupon.merchant.logo}}
+                imageSrc={{uri: this.props.store.logo}}
+                onPress={() => this.props.navigation.navigate("MerchantDetail", {tempData: this.props.store})}
                 icon={{name: "play-circle", type: "font-awesome"}}>
                 <View style={styles.textContainer}>
-                    <Text numberOfLines={1} style={styles.subText}>{this.props.coupon.merchant.title}</Text>
-                    <Text style={styles.subText}>
-                        {renderOfferCount(this.props.coupon.merchant.stats.voucher_count)}
+                    <Text numberOfLines={1} style={styles.subText}>
+                        {renderOfferCount(this.props.store.popularity/15)}
                     </Text>
+                    <Rating
+                        type="star"
+                        fractions={1}
+                        startingValue={9}
+                        readonly={true}
+                        imageSize={9}
+                        style={{paddingVertical: 0, marginTop:2}}
+                    />
                 </View>
             </Tile>
         );
     }
 }
+
+export default withNavigation(StoreCard);
 
 const styles = StyleSheet.create(
     {
@@ -59,11 +70,13 @@ const styles = StyleSheet.create(
         },
 
         subText: {
-            fontSize: 12
+            fontSize: 10
         },
 
         textContainer: {
-            flex: 1, flexDirection: "row", justifyContent: "space-between", alignContent: "flex-end"
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
         },
         sliderWrapper: {
             backgroundColor: styleVariables.lightBackgroundColor

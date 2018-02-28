@@ -4,6 +4,12 @@ import * as selectors from "./selectors";
 import {call, put, takeEvery, select} from "redux-saga/effects";
 import _ from "lodash";
 
+
+function* setCategorySection(token, categoryId) {
+    const resp = yield call(apiHelper.getMerchantsByCategory, token, categoryId);
+    yield put({type: types.SET_CATEGORY_OFFERS, result: resp, categoryId});
+}
+
 export function* getCategories() {
     try {
         const categories = yield select(selectors.getCategories);
@@ -22,11 +28,18 @@ export function* getCategories() {
 
 export function* getCategoryCarouselOffers(action) {
     try {
+        const $merchantList = yield select(selectors.getHomeMerchants);
+
+        if (!_.isEmpty($merchantList)) {
+            return null;
+        }
+
         const token = yield select(selectors.getAccessToken);
         const mainCategories = yield call(apiHelper.listCategories, token, 1);
-        let categoryIdList = mainCategories.map(a => a.id);
-        const resp = yield call(apiHelper.getCategoryOffers, token, categoryIdList);
-        yield put({type: types.SET_CATEGORY_OFFERS, result: resp ,mainCategories});
+
+        yield mainCategories.map(cat => call(setCategorySection, token, cat.id));
+        yield put({type: types.SET_REFRESH_STATUS, status: false});
+
     } catch (e) {
         yield put({type: types.API_FETCH_FAILED, message: e.message});
     }
