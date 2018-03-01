@@ -3,10 +3,10 @@ import {StyleSheet, View} from "react-native";
 import TopBar from "../../components/TopBar";
 import TabBar from "../../components/navigation/TabBar";
 import {bindActionCreators} from "redux";
-import {ActionCreators} from "../../actions/index";
+import {ActionCreators} from "../../flow/actions/index";
 import {connect} from "react-redux";
 import _ from "lodash";
-import CouponList from "../../components/CouponList";
+import CouponList from "../../components/coupon/CouponList";
 import {styleVariables} from "../../common/styles";
 import {SEARCH_COUPON} from "../../constants";
 
@@ -16,13 +16,20 @@ class CouponSearch extends Component {
         title: "COUPON SEARCH",
     };
 
+    handleRowClick(coupon) {
+        this.props.navigation.navigate("CouponDetail", {coupon});
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <TopBar {...this.props} searchType={SEARCH_COUPON}/>
 
                 <View style={styles.body}>
-                    <CouponList {...this.props} list={this.props.searchedCoupons}/>
+                    <CouponList
+                        {...this.props} list={this.props.searchedCoupons}
+                        onClick={this.handleRowClick.bind(this)}
+                    />
                 </View>
 
                 <TabBar {...this.props}/>
@@ -39,7 +46,7 @@ function mapStateTopProps(state) {
     return {
         searchedCoupons: _.isEmpty(state.searchedCoupons) ? [] : Object.values(state.searchedCoupons),
         searchTerm: state.searchTerm,
-        showLoading: state.refreshStatus.isRefreshing,
+        showLoading: state.refreshStatus,
     };
 }
 

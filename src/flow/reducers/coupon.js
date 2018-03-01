@@ -1,5 +1,6 @@
-import * as types from "../actions/types";
-import createReducer from "../common/createReducer";
+import * as types from "../types";
+import createReducer from "../../common/createReducer";
+import {storeCoupons} from "../../common/helperFuntions";
 
 export const foundCoupons = createReducer({}, {
     [types.SET_FOUND_COUPONS](state, action) {
@@ -42,19 +43,3 @@ export const searchedCoupons = createReducer({}, {
         return storeCoupons(state, action);
     }
 });
-
-const storeCoupons = function (state, action) {
-    if (!action.result.data) {
-        return state;
-    }
-
-    const items = {};
-
-    action.result.data.forEach((coupon) => {
-        if (coupon.merchant) {
-            items[coupon.id] = coupon;
-        }
-    });
-
-    return items;
-};

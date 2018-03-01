@@ -12,6 +12,7 @@ import TopCoupons from "../screens/tabs/TopCoupons";
 import PopularCoupons from "../screens/tabs/PopularCoupons";
 import ExpiringCoupons from "../screens/tabs/ExpiringCoupons";
 import MerchantSearch from "../screens/search/MerchantSearch";
+import CategoryMerchant from "../screens/search/CategoryMerchant";
 
 export const TabNav = TabNavigator(
     {
@@ -67,6 +68,9 @@ const RootStack = StackNavigator(
         },
         CouponSearch: {
             screen: CouponSearch
+        },
+        CategoryMerchant: {
+            screen: CategoryMerchant
         },
         CouponDetail: {
             screen: CouponDetail

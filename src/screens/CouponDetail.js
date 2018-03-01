@@ -23,6 +23,7 @@ export default class CouponDetail extends Component {
 
     render() {
         this.coupon = this.props.navigation.state.params.coupon;
+
         return (
 
             <View style={styles.container}>

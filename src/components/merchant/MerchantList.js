@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {ScrollView} from "react-native";
-import SiteActivityIndicator from "../components/SiteActivityIndicator";
-import commonStyles, {styleVariables} from "../common/styles";
-import {renderOfferCount} from "../common/helperFuntions";
+import SiteActivityIndicator from "../SiteActivityIndicator";
+import commonStyles, {styleVariables} from "../../common/styles";
+import {renderOfferCount} from "../../common/helperFuntions";
 import {List, ListItem} from "react-native-elements";
 
 export default class MerchantList extends Component {

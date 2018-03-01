@@ -2,14 +2,11 @@ import React, {Component} from "react";
 import {StyleSheet, View, Keyboard} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {SearchBar} from "react-native-elements";
-import {ActionCreators} from "../actions/index";
+import {ActionCreators} from "../flow/actions/index";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import _ from "lodash";
 import Touchable from "react-native-platform-touchable";
 import {styleVariables} from "../common/styles";
-import PropTypes from "prop-types";
-import SliderRow from "./coupon/SliderRow";
 
 class TopBar extends Component {
 
@@ -17,7 +14,7 @@ class TopBar extends Component {
 
     constructor(props) {
         super(props);
-        this.onChangeTextDelayed = _.debounce(this.onChangeTextDelayed.bind(this), 500);
+        this.onChangeTextDelayed = this.onChangeTextDelayed.bind(this);
     }
 
     onChangeTextDelayed(searchTerm, page = 1) {
@@ -66,7 +63,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateTopProps(state) {
     return {
-        showLoading: state.refreshStatus.isRefreshing,
+        showLoading: state.refreshStatus,
         searchTerm: state.searchTerm.keyword,
     };
 }

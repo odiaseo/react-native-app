@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Text} from "react-native";
-import {styleVariables} from "../common/styles";
+import {styleVariables} from "../../common/styles";
 import {Tile} from "react-native-elements";
-import {renderOfferCount} from "../common/helperFuntions";
+import {renderOfferCount} from "../../common/helperFuntions";
 import {withNavigation} from "react-navigation";
 import {Rating} from "react-native-elements";
 
-class StoreCard extends Component {
+class MerchantCard extends Component {
     render() {
         return (
             <Tile
@@ -20,11 +20,10 @@ class StoreCard extends Component {
                 imageContainerStyle={styles.image}
                 contentContainerStyle={styles.contentContainer}
                 imageSrc={{uri: this.props.store.logo}}
-                onPress={() => this.props.navigation.navigate("MerchantDetail", {tempData: this.props.store})}
-                icon={{name: "play-circle", type: "font-awesome"}}>
+                onPress={() => this.props.navigation.navigate("MerchantDetail", {tempData: this.props.store})}>
                 <View style={styles.textContainer}>
                     <Text numberOfLines={1} style={styles.subText}>
-                        {renderOfferCount(this.props.store.popularity/15)}
+                        {renderOfferCount(this.props.store.stats.voucher_count)}
                     </Text>
                     <Rating
                         type="star"
@@ -40,7 +39,7 @@ class StoreCard extends Component {
     }
 }
 
-export default withNavigation(StoreCard);
+export default withNavigation(MerchantCard);
 
 const styles = StyleSheet.create(
     {

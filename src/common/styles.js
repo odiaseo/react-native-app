@@ -6,7 +6,7 @@ export const styleVariables = {
     headerBackgroundColor: "#25282e",
     headerColor: "#cccccc",
     subTitleColor: "#888888",
-    lightBackgroundColor: "#eeeeee",
+    lightBackgroundColor: "#f7f7f7",
     grey: "#cccccc",
     primaryColor: "#ff3300",
     borderColor: "#eeeeee",

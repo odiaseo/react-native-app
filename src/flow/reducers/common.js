@@ -1,6 +1,6 @@
-import createReducer from "../common/createReducer";
-import * as types from "../actions/types";
-import options from "../config/options";
+import createReducer from "../../common/createReducer";
+import * as types from "../types";
+import options from "../../config/options";
 
 export const errorMessage = createReducer("", {
 
@@ -9,11 +9,9 @@ export const errorMessage = createReducer("", {
     }
 });
 
-export const refreshStatus = createReducer({}, {
+export const refreshStatus = createReducer(false, {
     [types.SET_REFRESH_STATUS](state, action) {
-        return {
-            isRefreshing: action.isRefreshing
-        };
+        return action.status;
     }
 });
 

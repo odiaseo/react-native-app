@@ -1,5 +1,5 @@
-import * as types from "../actions/types";
-import createReducer from "../common/createReducer";
+import * as types from "../types";
+import createReducer from "../../common/createReducer";
 
 export const searchTerm = createReducer("", {
     [types.SET_SEARCH_TERM](state, action) {

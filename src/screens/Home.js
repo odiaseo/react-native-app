@@ -5,7 +5,7 @@ import SliderRow from "../components/coupon/SliderRow";
 import ImageCarousel from "../components/home/ImageCarousel";
 import TabBar from "../components/navigation/TabBar";
 import {connect} from "react-redux";
-import {ActionCreators} from "../actions";
+import {ActionCreators} from "../flow/actions";
 import {bindActionCreators} from "redux";
 import {styleVariables} from "../common/styles";
 import _ from "lodash";
@@ -20,7 +20,7 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        this.props.getCategoryCarouselOffers();
+        this.props.getCarouselMerchants();
     }
 
     render() {
@@ -28,12 +28,12 @@ class Home extends Component {
             <View style={styles.container}>
                 <HomeTopBar {...this.props}/>
 
-                <ScrollView ref={this.parentScrollView}>
+                <ScrollView ref={(ref) => this.parentScrollView = ref}>
                     <View style={styles.body}>
                         <View style={styles.carouselWrapper}>
                             <ImageCarousel parentScrollView={this.parentScrollView} {...this.props}/>
                         </View>
-                        {this.props.categoryOffers.map((section, index) => <SliderRow key={index} section={section}/>)}
+                        {this.props.merchants.map((section, index) => <SliderRow key={index} section={section}/>)}
                     </View>
                 </ScrollView>
 
@@ -50,9 +50,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateTopProps(state) {
     return {
-        showLoading: state.refreshStatus.isRefreshing,
-        categories: state.categories,
-        categoryOffers: _.isEmpty(state.categoryOffers) ? [] : Object.values(state.categoryOffers),
+        showLoading: state.refreshStatus,
+        merchants: _.isEmpty(state.carouselMerchants) ? [] : Object.values(state.carouselMerchants),
     };
 }
 
@@ -64,7 +63,7 @@ const styles = StyleSheet.create(
             flex: 1,
             flexDirection: "column",
             marginTop: 20,
-            backgroundColor: styleVariables.backgroundColor
+            backgroundColor: styleVariables.lightBackgroundColor
         },
         carouselWrapper: {
             marginBottom: 5

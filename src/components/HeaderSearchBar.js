@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {StyleSheet, View, Keyboard} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {SearchBar} from "react-native-elements";
-import {ActionCreators} from "../actions/index";
+import {ActionCreators} from "../flow/actions/index";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import _ from "lodash";
@@ -59,7 +59,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateTopProps(state) {
     return {
-        showLoading: state.refreshStatus.isRefreshing,
+        showLoading: state.refreshStatus,
         searchTerm: state.searchTerm.keyword,
     };
 }

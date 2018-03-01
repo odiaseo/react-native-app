@@ -1,5 +1,5 @@
-import * as constants from "../constants";
-import * as types from "./types";
+import * as constants from "../../constants/index";
+import * as types from "../types";
 
 export function searchByKeyword(type, searchTerm, page = 1) {
     switch (type) {
@@ -18,19 +18,10 @@ export function searchByKeyword(type, searchTerm, page = 1) {
     }
 }
 
-export function getCouponsByType(type, page = 1) {
-    return {
-        type: types.GET_COUPONS,
-        storeType: type,
-        segment: types.GET_COUPONS,
-        page
-    };
-}
-
 export function setActivityStatus(status) {
     return {
         type: types.SET_REFRESH_STATUS,
-        isRefreshing: status
+        status: status
     };
 }
 

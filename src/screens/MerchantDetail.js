@@ -1,28 +1,28 @@
 import React, {Component} from "react";
-import {StyleSheet, Image, Linking, View, ScrollView} from "react-native";
+import {StyleSheet, View, ScrollView, Image} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import TabBar from "../components/navigation/TabBar";
 import {styleVariables} from "../common/styles";
 import {Text, Button, Rating} from "react-native-elements";
 import HeaderRight from "../components/HeaderRight";
+import CouponList from "../components/coupon/CouponList";
 import AboutSection from "../components/AboutSection";
-import {ActionCreators} from "../actions";
+import {ActionCreators} from "../flow/actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import _ from "lodash";
+import {renderOfferCount, openExternalLink} from "../common/helperFuntions";
+import Touchable from "react-native-platform-touchable";
 
 class MerchantDetail extends Component {
+
+    tempData = null;
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            enriched: {}
-        };
-
-        this.openExternalLink = this.openExternalLink.bind(this);
-        this.renderStoreButton = this.renderStoreButton.bind(this);
         this.renderCategorySection = this.renderCategorySection.bind(this);
+        this.handleOutlink = this.handleOutlink.bind(this);
     }
 
     static navigationOptions = ({navigation}) => {
@@ -35,52 +35,28 @@ class MerchantDetail extends Component {
         };
     };
 
+    handleOutlink(coupon) {
+        openExternalLink(coupon.outlink);
+    }
+
     componentDidMount() {
-        if (this.props.navigation.state.params.tempData.category) {
-            this.setState({
-                enriched: this.props.navigation.state.params.tempData
-            });
-        } else {
-            this.props.setActivityStatus(true);
-            this.props.findMerchantById(this.props.navigation.state.params.tempData.id);
-            this.setState({
-                enriched: this.props.merchant
-            });
-        }
-    }
-
-    openExternalLink() {
-        Linking.openURL(this.props.merchant.outlink).catch(err => console.error("An error occurred", err));
-    }
-
-    renderStoreButton() {
-        if (!this.state.enriched) {
-            return null;
-        }
-
-        return (
-            <View style={{flex: 1}}>
-                <Button
-                    backgroundColor={styleVariables.dealColor}
-                    iconRight={{name: "shopping-cart"}}
-                    onPress={this.openExternalLink.bind(this)}
-                    containerViewStyle={{marginTop: 60, alignContent: "stretch"}}
-                    title={"Visit " + this.state.enriched.title}/>
-            </View>
-        );
+        this.props.setActivityStatus(true);
+        this.props.clearMerchantDetails();
+        this.props.findMerchantById(this.props.navigation.state.params.tempData.id);
+        this.props.getCouponsByMerchantId(this.props.navigation.state.params.tempData.id);
     }
 
     renderCategorySection() {
-        if (this.state.enriched) {
+
+        if (_.isEmpty(this.props.merchant)) {
             return null;
         }
 
         return (
             <View>
+                <Text style={styles.merchantTitle}>{this.props.merchant.category.title}</Text>
                 <Text style={styles.merchantTitle}>
-                    {
-                        // this.props.merchant.category.title + ' ' + util.renderOfferCount(this.props.merchant.category.stats.voucher_count, true)
-                    }
+                    {renderOfferCount(this.props.merchant.category.stats.voucher_count)}
                 </Text>
                 <Rating
                     type="star"
@@ -96,7 +72,8 @@ class MerchantDetail extends Component {
     }
 
     render() {
-        let tempData = this.props.navigation.state.params.tempData;
+
+        this.tempData = this.props.navigation.state.params.tempData;
 
         return (
 
@@ -104,31 +81,56 @@ class MerchantDetail extends Component {
                 <ScrollView>
                     <View style={styles.body}>
                         <View style={styles.detailsWrapper}>
-                            <Image source={{uri: tempData.logo}} style={styles.image}/>
+                            <Touchable
+                                onPress={() => this.handleOutlink(this.props.merchant)}>
+                                <Image source={{uri: this.tempData.logo}} style={styles.image}/>
+                            </Touchable>
                             <View style={styles.details}>
-                                <Text style={styles.offerTitle}>{tempData.title}</Text>
+                                <Text style={styles.offerTitle}>{this.tempData.title}</Text>
                                 {this.renderCategorySection()}
                             </View>
                         </View>
 
                         <View style={styles.rowItems}>
                             <Icon name="monetization-on" size={24} color={styleVariables.primaryColor}/>
-                            <Text style={styles.rowItemText}>{tempData.title}</Text>
+                            <Text style={styles.rowItemText}>{this.tempData.title}</Text>
                         </View>
 
                         <View style={styles.rowItems}>
                             <Icon name="folder" size={24} color={styleVariables.couponColor}/>
-                            <Text style={styles.rowItemText}>{tempData.title}</Text>
+                            <Text style={styles.rowItemText}>{this.tempData.title}</Text>
                         </View>
 
-                        {
-                            this.state.enriched && <AboutSection
-                                title={this.state.enriched.title}
-                                description={this.state.enriched.description}
+                        {!this.props.showLoading && this.props.merchant &&
+                        <AboutSection
+                            title={this.tempData.title}
+                            description={this.props.merchant ? this.props.merchant.description : null}
+                        />}
+
+                        {(this.props.coupons.length > 0) &&
+                        <View style={styles.couponSection}>
+                            <Text style={{fontWeight: "bold", paddingHorizontal: 20}}>Offers </Text>
+                            <CouponList
+                                {...this.props}
+                                list={this.props.coupons}
+                                onClick={this.handleOutlink}
+                                type="merchant"
                             />
+                        </View>
                         }
 
-                        {this.renderStoreButton()}
+                        <View style={{flex: 1}}>
+                            <Button
+                                loading={this.props.showLoading}
+                                backgroundColor={styleVariables.dealColor}
+                                iconRight={{name: "shopping-cart"}}
+                                onPress={() => this.handleOutlink(this.props.merchant)}
+                                textStyle={{fontSize: styleVariables.mainTextFontSize}}
+                                containerViewStyle={{marginVertical: 15, alignContent: "stretch"}}
+                                title={"Visit " + this.tempData.title}/>
+                        </View>
+
+
                     </View>
                 </ScrollView>
                 <TabBar {...this.props}/>
@@ -146,7 +148,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateTopProps(state) {
     return {
         merchant: _.isEmpty(state.merchantDetails) ? {} : state.merchantDetails,
-        showLoading: state.refreshStatus.isRefreshing,
+        coupons: _.isEmpty(state.merchantCoupons) ? [] : Object.values(state.merchantCoupons),
+        showLoading: state.refreshStatus,
     };
 }
 
@@ -172,6 +175,11 @@ const styles = StyleSheet.create(
             borderColor: styleVariables.borderColor
         },
 
+        couponSection: {
+            marginVertical: 20,
+            borderBottomWidth: 1,
+            borderColor: styleVariables.borderColor
+        },
         rowItemText: {
             marginTop: 5,
             marginLeft: 10

@@ -1,5 +1,5 @@
-import * as types from "../actions/types";
-import apiHelper from "../common/apiHelper";
+import * as types from "../types";
+import apiHelper from "../../common/apiHelper";
 import {setRefreshStatus} from "./coupon";
 import * as selectors from "./selectors";
 import {call, put, takeEvery, takeLatest, select} from "redux-saga/effects";

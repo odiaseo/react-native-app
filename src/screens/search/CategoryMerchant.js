@@ -7,23 +7,25 @@ import {ActionCreators} from "../../flow/actions/index";
 import {connect} from "react-redux";
 import _ from "lodash";
 import {styleVariables} from "../../common/styles";
-import {SEARCH_MERCHANT} from "../../constants";
 import MerchantList from "../../components/merchant/MerchantList";
+import HeaderRight from "../../components/HeaderRight";
 
-class MerchantSearch extends Component {
+class CategoryMerchant extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
-    static navigationOptions = {
-        title: "MERCHANT SEARCH",
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: navigation.state.params.category.title,
+            headerRight: (<HeaderRight/>),
+        };
     };
+
+    componentDidMount() {
+        this.props.findMerchantsByCategory(this.props.navigation.state.params.category.id);
+    }
 
     render() {
         return (
             <View style={styles.container}>
-                <TopBar {...this.props} searchType={SEARCH_MERCHANT}/>
 
                 <View style={styles.body}>
                     <MerchantList {...this.props} list={this.props.merchants}/>
@@ -41,12 +43,12 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateTopProps(state) {
     return {
-        merchants: _.isEmpty(state.searchedMerchants) ? [] : Object.values(state.searchedMerchants),
+        merchants: _.isEmpty(state.categoryMerchants) ? [] : Object.values(state.categoryMerchants),
         showLoading: state.refreshStatus,
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(MerchantSearch);
+export default connect(mapStateTopProps, mapDispatchToProps)(CategoryMerchant);
 
 const styles = StyleSheet.create(
     {

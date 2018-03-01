@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {StyleSheet, View, ScrollView} from "react-native";
 import TabBar from "../components/navigation/TabBar";
 import {bindActionCreators} from "redux";
-import {ActionCreators} from "../actions";
+import {ActionCreators} from "../flow/actions";
 import {connect} from "react-redux";
 import SiteActivityIndicator from "../components/SiteActivityIndicator";
 import HeaderRight from "../components/HeaderRight";
@@ -10,6 +10,7 @@ import {List, ListItem} from "react-native-elements";
 import commonStyles, {styleVariables} from "../common/styles";
 import * as util from "../common/helperFuntions";
 import _ from "lodash";
+
 class Category extends Component {
 
     static navigationOptions = {
@@ -18,10 +19,8 @@ class Category extends Component {
     };
 
     componentDidMount() {
-        if (this.props.categories.length === 0) {
-            this.props.setActivityStatus(true);
-            this.props.getCategories();
-        }
+        this.props.setActivityStatus(true);
+        this.props.getCategories();
     }
 
     renderResultPage() {
@@ -41,6 +40,7 @@ class Category extends Component {
                             <ListItem
                                 leftIcon={{name: util.getIconName(category.icon_class_name), type: "font-awesome"}}
                                 key={index}
+                                onPress={() => this.props.navigation.navigate("CategoryMerchant", {category})}
                                 subtitle={util.renderOfferCount(category.stats.voucher_count)}
                                 titleStyle={{fontSize: styleVariables.mainTextFontSize}}
                                 subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: "normal"}}
@@ -71,7 +71,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateTopProps(state) {
     return {
         categories: _.isEmpty(state.categories) ? [] : Object.values(state.categories),
-        showLoading: state.refreshStatus.isRefreshing,
+        showLoading: state.refreshStatus,
     };
 }
 

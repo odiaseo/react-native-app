@@ -1,7 +1,7 @@
 import React from "react";
 import options from "../config/options";
 import moment from "moment";
-import * as types from "../actions/types";
+import * as types from "../flow/types";
 import axios from "axios";
 import _ from "lodash";
 
@@ -56,10 +56,10 @@ const ApiHelper = {
     },
 
     listCategories(accessToken, level = null) {
-        let endPoint = "/site-category";
+        let endPoint = "/site-category?sort=+title";
 
         if (level !== null) {
-            endPoint += "?level=" + level;
+            endPoint += "&level=" + level;
         }
 
         return call(endPoint, accessToken)
@@ -74,11 +74,28 @@ const ApiHelper = {
             .then((responseJson) => responseJson);
     },
 
-
-    getMerchants(accessToken, keyword, page, limit = 20) {
+    findMerchantsByCategory(accessToken, categoryId, page = 1, limit = 10) {
         const params = {
             unique_field: "title",
-            fields: ["id", "title", "logo", "voucher_count", "is_featured", "is_exclusive"].join(","),
+            //fields: ["id", "title", "logo", "is_featured", "deep_link"].join(","),
+            sort: ["-display_order", "-popularity"].join(','),
+            filters: [`category_id=${categoryId}`, "has_logo=true", "is_active=true"].join(","),
+            page: page,
+            per_page: limit
+        };
+
+        const queryString = querystring.stringify(params);
+        const endPoint = `/merchant?${queryString}`;
+        console.log(endPoint);
+
+        return call(endPoint, accessToken)
+            .then((responseJson) => responseJson.data);
+    },
+
+    searchMerchants(accessToken, keyword, page, limit = 20) {
+        const params = {
+            unique_field: "title",
+            fields: ["id", "title", "logo", "voucher_count", "is_featured"].join(","),
             filters: ["has_logo=true", "is_active=true"].join(","),
             keyword,
             page,
@@ -86,9 +103,8 @@ const ApiHelper = {
         };
 
         const queryString = querystring.stringify(params);
-
-        //let endPoint = `/search/merchant?filter=is_active=true,is_profitable=true,has_logo=true,&per_page=${limit}&page=${page}&keyword=${keyword}`;
         const endPoint = `/type-ahead/merchant?${queryString}`;
+
         console.log(endPoint);
 
         return call(endPoint, accessToken)
@@ -97,26 +113,60 @@ const ApiHelper = {
 
     getCoupons(accessToken, storeType, page = 1, limit = 20) {
         let endPoint;
+        let params = {};
 
         switch (storeType) {
             case types.SET_POPULAR_COUPONS:
-                endPoint = `/voucher?sort=+is_expired,-popularity&per_page=${limit}&page=${page}`;
+                params = {
+                    sort: "+is_expired,-popularity"
+                };
                 break;
             case types.SET_FEATURED_COUPONS:
-                endPoint = `/voucher?sort=-is_exclusive,-is_featured&filter=is_expired=false&per_page=${limit}&page=${page}`;
+                params = {
+                    sort: "-is_exclusive,-is_featured",
+                    filters: "is_expired=false"
+                };
                 break;
             case types.SET_TOP_COUPONS:
-                endPoint = `/voucher?sort=-discount&filter=is_expired=false&per_page=${limit}&page==${page}`;
+                params = {
+                    sort: "-discount",
+                    filters: "is_expired=false"
+                };
                 break;
             case types.SET_EXPIRING_COUPONS:
-                endPoint = `/voucher?sort=+is_expired,+end_at,-created_at&filter=end_at=null<>&per_page=${limit}&page=${page}`;
+                params = {
+                    sort: "+is_expired,+end_at,-created_at",
+                    filters: "end_at=null<>"
+                };
                 break;
             case types.SET_LATEST_COUPONS:
-            default:
-                endPoint = `/voucher?sort=-created_at&filter=is_expired=false&per_page=${limit}&page=${page}`;
+                params = {
+                    sort: "-created_at",
+                    filters: "is_expired=false"
+                };
+                break;
         }
 
+        let filters = Object.assign({}, params, {page: page, per_page: limit});
+        const queryString = querystring.stringify(filters);
+
+        endPoint = `/voucher?${queryString}`;
+
         return call(endPoint, accessToken)
+            .then((responseJson) => responseJson);
+    },
+
+    getMerchantCoupons(accessToken, merchantId, page = 1, limit = 10) {
+        let filters = {
+            filters: `is_expired=0,merchant_id=${merchantId}`,
+            page: page,
+            sort: "-popularity",
+            per_page: limit
+        };
+
+        const queryString = querystring.stringify(filters);
+
+        return call(`/voucher?${queryString}`, accessToken)
             .then((responseJson) => responseJson);
     },
 
@@ -133,8 +183,20 @@ const ApiHelper = {
             .then((responseJson) => responseJson);
     },
 
-    getMerchantsByCategory(accessToken, categoryId, limit = 10) {
-        const endPoint = `/merchant?per_page=${limit}&filters=has_logo=true&category_id=${categoryId}&sort=-is_profitable,-popularity`;
+    getMerchantsByCategory(accessToken, categoryList, limit = 10, page = 1) {
+
+        const params = {
+            fields: ["id", "deep_link", "title", "logo", "voucher_count", "is_featured", "category_id"].join(","),
+            filters: ["has_logo=true", "is_active=true"].join(","),
+            sort: "-display_order,-is_profitable,-popularity",
+            group_id: categoryList.join(","),
+            page: page,
+            per_page: limit
+        };
+
+        const queryString = querystring.stringify(params);
+
+        const endPoint = `/merchant/group/category_id?${queryString}`;
 
         return call(endPoint, accessToken)
             .then((merchants) => {
@@ -147,17 +209,17 @@ const ApiHelper = {
     groupByCategory(merchantList) {
         let sections = {};
 
-        merchantList.map((merchant) => {
-            let categoryId = merchant.category.id;
+        _.forEach(merchantList, function (merchants) {
+            const firstMerchant = merchants[0];
+            const categoryId = firstMerchant.category.id;
 
             if (!_.has(sections, categoryId)) {
+
                 sections[categoryId] = {
-                    title: merchant.category.title,
-                    data: []
+                    title: firstMerchant.category.title,
+                    data: merchants
                 };
             }
-
-            sections[categoryId]["data"].push(merchant);
         });
 
         return sections;
