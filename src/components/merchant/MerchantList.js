@@ -1,39 +1,20 @@
-import React, {Component} from "react";
+import React from "react";
 import {ScrollView} from "react-native";
-import SiteActivityIndicator from "../SiteActivityIndicator";
-import commonStyles, {styleVariables} from "../../common/styles";
-import {renderOfferCount} from "../../common/helperFuntions";
-import {List, ListItem} from "react-native-elements";
+import commonStyles from "../../common/styles";
+import {List} from "react-native-elements";
+import PropTypes from "prop-types";
+import MerchantListItem from "./MerchantListItem";
 
-export default class MerchantList extends Component {
+const MerchantList = (props) => (
+    <ScrollView>
+        <List containerStyle={commonStyles.listContainerStyle}>
+            {props.list.map((merchant) => (<MerchantListItem key={merchant.id} merchant={merchant} {...props} />))}
+        </List>
+    </ScrollView>
+);
 
-    render() {
-        if (this.props.showLoading) {
-            return (
-                <SiteActivityIndicator/>
-            );
-        }
+MerchantList.propTypes = {
+    list: PropTypes.array
+};
 
-        return (
-
-            <ScrollView>
-                <List containerStyle={commonStyles.listContainerStyle}>
-                    {
-                        this.props.list.map((merchant, index) => (
-                            <ListItem
-                                avatar={{uri: merchant.logo}}
-                                key={index}
-                                onPress={() => this.props.navigation.navigate("MerchantDetail", {tempData: merchant})}
-                                subtitle={renderOfferCount(merchant.voucher_count)}
-                                titleStyle={{fontSize: styleVariables.mainTextFontSize}}
-                                subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: "normal"}}
-                                containerStyle={{borderBottomColor: styleVariables.borderColor, marginTop: 0}}
-                                title={merchant.title}
-                            />
-                        ))
-                    }
-                </List>
-            </ScrollView>
-        );
-    }
-}
+export default MerchantList;

@@ -1,23 +1,11 @@
 import React, {Component} from "react";
-import {StyleSheet, View} from "react-native";
-import TopBar from "../../components/TopBar";
-import TabBar from "../../components/navigation/TabBar";
-import {bindActionCreators} from "redux";
-import {ActionCreators} from "../../flow/actions/index";
-import {connect} from "react-redux";
 import _ from "lodash";
-import {styleVariables} from "../../common/styles";
 import MerchantList from "../../components/merchant/MerchantList";
-import HeaderRight from "../../components/HeaderRight";
+import withConnect, {withIndicator} from "../../config/hoc";
+import BaseLayout from "../../components/layout/BaseLayout";
+import PropTypes from "prop-types";
 
 class CategoryMerchant extends Component {
-
-    static navigationOptions = ({navigation}) => {
-        return {
-            title: navigation.state.params.category.title,
-            headerRight: (<HeaderRight/>),
-        };
-    };
 
     componentDidMount() {
         this.props.findMerchantsByCategory(this.props.navigation.state.params.category.id);
@@ -25,20 +13,12 @@ class CategoryMerchant extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-
-                <View style={styles.body}>
-                    <MerchantList {...this.props} list={this.props.merchants}/>
-                </View>
-
-                <TabBar {...this.props}/>
-            </View>
+            <BaseLayout {...this.props} showSearch={false}>
+                {this.props.children}
+                <MerchantList {...this.props} list={this.props.merchants}/>
+            </BaseLayout>
         );
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(ActionCreators, dispatch);
 }
 
 function mapStateTopProps(state) {
@@ -48,16 +28,11 @@ function mapStateTopProps(state) {
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(CategoryMerchant);
+CategoryMerchant.propTypes = {
+    navigation: PropTypes.object,
+    children: PropTypes.node,
+    merchants: PropTypes.array,
+    findMerchantsByCategory: PropTypes.func
+};
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-            backgroundColor: styleVariables.backgroundColor
-        },
-        body: {
-            flex: 1
-        }
-    }
-);
+export default withConnect(withIndicator(CategoryMerchant), mapStateTopProps);

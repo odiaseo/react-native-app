@@ -3,6 +3,18 @@
     "react-native"
   ],
   "rules": {
+    "import/no-namespace": {
+      "error": false
+    },
+    "no-invalid-this": 0,
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": false,
+        "variables": false
+      }
+    ],
     "semi": [
       "error",
       "always"
@@ -10,7 +22,11 @@
     "quotes": [
       "error",
       "double"
-    ]
+    ],
+    "babel/new-cap": 1,
+    "babel/object-curly-spacing": 1,
+    "babel/no-invalid-this": 1,
+    "babel/semi": 1
   },
   "parserOptions": {
     "ecmaVersion": 6,
@@ -19,5 +35,11 @@
       "jsx": true,
       "impliedStrict": true
     }
+  },
+  "plugins": [
+    "babel"
+  ],
+  "globals": {
+    "__DEV__": true
   }
 }

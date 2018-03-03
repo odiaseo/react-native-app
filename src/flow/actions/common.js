@@ -18,10 +18,28 @@ export function searchByKeyword(type, searchTerm, page = 1) {
     }
 }
 
+export function getHomePageData() {
+    return [
+        {
+            type: types.SET_REFRESH_STATUS,
+            status: true
+        },
+        {
+            type: types.GET_HOME_PAGE_DATA,
+        }
+    ];
+}
+
+export function resetCache() {
+    return {
+        type: types.RESET_CACHE,
+    };
+}
+
 export function setActivityStatus(status) {
     return {
         type: types.SET_REFRESH_STATUS,
-        status: status
+        status
     };
 }
 

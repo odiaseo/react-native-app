@@ -1,74 +1,28 @@
-import React, {Component} from "react";
-import {StyleSheet, Text, View} from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import Touchable from "react-native-platform-touchable";
+import React from "react";
+import {StyleSheet, View} from "react-native";
 import {styleVariables} from "../../common/styles";
+import TabIcon from "./TabIcon";
 
-export default class TabBar extends Component {
-    render() {
-        return (
-            <View style={styles.tabBar}>
-                <Touchable
-                    hitSlop={styleVariables.hitSlop}
-                    style={styles.tabItem} onPress={() => this.props.navigation.navigate("Home")}>
-                    <View style={styles.tabItem}>
-                        <Icon name="home" size={25}/>
-                        <Text style={styles.tabTitle}>Home</Text>
-                    </View>
-                </Touchable>
+const TabBar = (props) => (
+    <View style={styles.tabBar}>
+        <TabIcon routeName="Home" iconName="home" iconTitle="Home" {...props}/>
+        <TabIcon routeName="WhatsHot" iconName="whatshot" iconTitle="Trending" {...props}/>
+        <TabIcon routeName="MerchantSearch" iconName="subscriptions" iconTitle="Stores" {...props}/>
+        <TabIcon routeName="CategoryList" iconName="folder" iconTitle="Categories" {...props}/>
+    </View>
+);
 
-                <Touchable
-                    hitSlop={styleVariables.hitSlop}
-                    style={styles.tabItem}
-                    onPress={() => this.props.navigation.navigate("WhatsHot")}>
-                    <View style={styles.tabItem}>
-                        <Icon name="whatshot" size={25}/>
-                        <Text style={styles.tabTitle}>Trending</Text>
-                    </View>
-                </Touchable>
-
-                <Touchable
-                    hitSlop={styleVariables.hitSlop}
-                    style={styles.tabItem}
-                    onPress={() => this.props.navigation.navigate("MerchantSearch")}>
-                    <View style={styles.tabItem}>
-                        <Icon name="subscriptions" size={25}/>
-                        <Text style={styles.tabTitle}>Stores</Text>
-                    </View>
-                </Touchable>
-
-                <Touchable
-                    style={styles.tabItem}
-                    hitSlop={styleVariables.hitSlop}
-                    onPress={() => this.props.navigation.navigate("CategoryList")}>
-                    <View style={styles.tabItem}>
-                        <Icon name="folder" size={25}/>
-                        <Text style={styles.tabTitle}>Categories</Text>
-                    </View>
-                </Touchable>
-            </View>
-        );
-    }
-}
+export default TabBar;
 
 const styles = StyleSheet.create(
     {
         tabBar: {
-            backgroundColor: "white",
+            backgroundColor: styleVariables.backgroundColor,
             height: 60,
             borderTopWidth: 0.5,
-            borderColor: "#E5E5E5",
+            borderColor: styleVariables.borderColor,
             flexDirection: "row",
             justifyContent: "space-around"
-        },
-        tabItem: {
-            alignItems: "center",
-            justifyContent: "center"
-        },
-        tabTitle: {
-            fontSize: 11,
-            color: "#3C3C3C",
-            paddingTop: 3
         }
     }
 );

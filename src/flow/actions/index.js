@@ -1,5 +1,5 @@
 import * as MerchantActions from "./merchant";
-import * as  CouponActions from "./coupon";
+import * as CouponActions from "./coupon";
 import * as CommonActions from "./common";
 import * as CategoryActions from "./category";
 

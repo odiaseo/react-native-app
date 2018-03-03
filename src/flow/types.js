@@ -47,3 +47,5 @@ export const GET_ACCESS_TOKEN = "GET_ACCESS_TOKEN";
 export const GET_COUPONS = "GET_COUPONS";
 export const SEARCH_COUPONS = "SEARCH_COUPONS";
 export const RESET_CACHE = "RESET_CACHE";
+
+export const GET_HOME_PAGE_DATA = "GET_HOME_PAGE_DATA";

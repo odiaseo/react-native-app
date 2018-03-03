@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {StyleSheet, View, ScrollView, Text} from "react-native";
 import StoreCard from "../merchant/MerchantCard";
-import {styleVariables} from "../../common/styles";
 import PropTypes from "prop-types";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Touchable from "react-native-platform-touchable";
@@ -20,11 +19,12 @@ export default class SliderRow extends Component {
             currentY: 0
         };
 
-        this.scrollLeft = this.scrollLeft.bind(this);
-        this.scrollRight = this.scrollRight.bind(this);
+        this.handleScrollLeft = this.handleScrollLeft.bind(this);
+        this.handleScrollRight = this.handleScrollRight.bind(this);
+        this.setItemRef = this.setItemRef.bind(this);
     }
 
-    scrollLeft() {
+    handleScrollLeft() {
         this.scrollViewRef.scrollTo({x: 0, y: 0, animated: true});
         this.setState(
             {
@@ -34,7 +34,7 @@ export default class SliderRow extends Component {
         );
     }
 
-    scrollRight() {
+    handleScrollRight() {
         this.scrollViewRef.scrollToEnd({animated: true});
         this.setState(
             {
@@ -42,6 +42,10 @@ export default class SliderRow extends Component {
                 showRightIcon: false,
             }
         );
+    }
+
+    setItemRef(ref) {
+        this.scrollViewRef = ref;
     }
 
     render() {
@@ -52,29 +56,26 @@ export default class SliderRow extends Component {
                     {this.state.showLeftIcon &&
                     <Touchable
                         hitSlop={commonStyles.hitSlop}
-                        onPress={this.scrollLeft}>
+                        onPress={this.handleScrollLeft}>
                         <Icon name="chevron-left" style={styles.viewIcon}/>
                     </Touchable>}
                     {this.state.showRightIcon &&
                     <Touchable
                         hitSlop={commonStyles.hitSlop}
-                        onPress={this.scrollRight}>
-                        <View style={{flexDirection: "row"}}>
+                        onPress={this.handleScrollRight}>
+                        <View>
                             <Icon name="chevron-right" style={styles.viewIcon}/>
                         </View>
                     </Touchable>}
                 </View>
                 <ScrollView
-                    contentContainerStyle={{
-                        paddingTop: 5,
-                        paddingBottom: 15,
-                    }}
-                    ref={ref => this.scrollViewRef = ref}
+                    contentContainerStyle={styles.scrollContentContainer}
+                    ref={this.setItemRef}
                     horizontal
                     keyboardDismissMode={"on-drag"}
                     scrollEventThrottle={16}
                     maximumZoomScale={3.0}>
-                    {this.props.section.data.map((store, index) => <StoreCard key={index} store={store}/>)}
+                    {this.props.section.data.map((store, index) => (<StoreCard key={index} store={store}/>))}
                 </ScrollView>
             </View>
         );
@@ -90,7 +91,10 @@ const styles = StyleSheet.create(
         contentContainer: {
             flex: 1,
             marginVertical: 15,
-            //backgroundColor: styleVariables.lightBackgroundColor
+        },
+        scrollContentContainer: {
+            paddingTop: 5,
+            paddingBottom: 15,
         },
         viewIcon: {
             marginHorizontal: 0,
@@ -106,9 +110,6 @@ const styles = StyleSheet.create(
         },
         slideTitle: {
             fontWeight: "bold",
-        },
-        moreTextLink: {
-            paddingHorizontal: 5,
-        },
+        }
     }
 );

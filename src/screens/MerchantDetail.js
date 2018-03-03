@@ -1,52 +1,48 @@
 import React, {Component} from "react";
-import {StyleSheet, View, ScrollView, Image} from "react-native";
+import {StyleSheet, View, ScrollView, Image, Share} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import TabBar from "../components/navigation/TabBar";
-import {styleVariables} from "../common/styles";
+import commonStyles, {styleVariables} from "../common/styles";
 import {Text, Button, Rating} from "react-native-elements";
-import HeaderRight from "../components/HeaderRight";
 import CouponList from "../components/coupon/CouponList";
 import AboutSection from "../components/AboutSection";
-import {ActionCreators} from "../flow/actions";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
 import _ from "lodash";
 import {renderOfferCount, openExternalLink} from "../common/helperFuntions";
 import Touchable from "react-native-platform-touchable";
+import withConnect, {withIndicator} from "../config/hoc";
+import BaseLayout from "../components/layout/BaseLayout";
+import PropTypes from "prop-types";
 
 class MerchantDetail extends Component {
 
     tempData = null;
 
-    constructor(props) {
-        super(props);
+    handleSocialShare = () => Share.share(
+        {
+            message: "Testing share" + this.props.merchant.title,
+            url: "http://bam.tech", //IOS  only
+            title: this.props.merchant.description
+        },
+        {
+            // Android only:
+            dialogTitle: "Share BAM goodness",
+            // iOS only:
+            subject: "",
+            tintColor: "red",
+            excludedActivityTypes: []
+        }
+    );
 
-        this.renderCategorySection = this.renderCategorySection.bind(this);
-        this.handleOutlink = this.handleOutlink.bind(this);
-    }
+    handleOutlink = () => openExternalLink(this.props.merchant.outlink);
 
-    static navigationOptions = ({navigation}) => {
-
-        const {params} = navigation.state;
-
-        return {
-            title: params ? params.tempData.title : "STORE DETAIL",
-            headerRight: (<HeaderRight/>)
-        };
+    handleGoToCategoryMerchantPage = () => {
+        this.props.navigation.navigate("CategoryMerchant", {category: this.props.merchant.category});
     };
 
-    handleOutlink(coupon) {
-        openExternalLink(coupon.outlink);
-    }
-
     componentDidMount() {
-        this.props.setActivityStatus(true);
-        this.props.clearMerchantDetails();
-        this.props.findMerchantById(this.props.navigation.state.params.tempData.id);
         this.props.getCouponsByMerchantId(this.props.navigation.state.params.tempData.id);
     }
 
-    renderCategorySection() {
+    renderCategorySection = () => {
 
         if (_.isEmpty(this.props.merchant)) {
             return null;
@@ -54,22 +50,25 @@ class MerchantDetail extends Component {
 
         return (
             <View>
-                <Text style={styles.merchantTitle}>{this.props.merchant.category.title}</Text>
-                <Text style={styles.merchantTitle}>
+                <Touchable
+                    onPress={this.handleGoToCategoryMerchantPage}>
+                    <Text style={styles.subTitle}>{this.props.merchant.category.title}</Text>
+                </Touchable>
+                <Text style={styles.subTitle}>
                     {renderOfferCount(this.props.merchant.category.stats.voucher_count)}
                 </Text>
                 <Rating
                     type="star"
                     fractions={1}
                     startingValue={9}
-                    readonly={true}
+                    readonly
                     imageSize={13}
-                    style={{paddingVertical: 10}}
+                    style={styles.ratingStyle}
                 />
             </View>
 
         );
-    }
+    };
 
     render() {
 
@@ -77,28 +76,29 @@ class MerchantDetail extends Component {
 
         return (
 
-            <View style={styles.container}>
+            <BaseLayout {...this.props} showSearch={false}>
                 <ScrollView>
                     <View style={styles.body}>
                         <View style={styles.detailsWrapper}>
                             <Touchable
-                                onPress={() => this.handleOutlink(this.props.merchant)}>
+                                onPress={this.handleOutlink}>
                                 <Image source={{uri: this.tempData.logo}} style={styles.image}/>
                             </Touchable>
                             <View style={styles.details}>
-                                <Text style={styles.offerTitle}>{this.tempData.title}</Text>
+                                <Text style={styles.mainTitle}>{this.tempData.title}</Text>
                                 {this.renderCategorySection()}
                             </View>
                         </View>
 
                         <View style={styles.rowItems}>
-                            <Icon name="monetization-on" size={24} color={styleVariables.primaryColor}/>
-                            <Text style={styles.rowItemText}>{this.tempData.title}</Text>
-                        </View>
-
-                        <View style={styles.rowItems}>
-                            <Icon name="folder" size={24} color={styleVariables.couponColor}/>
-                            <Text style={styles.rowItemText}>{this.tempData.title}</Text>
+                            <Touchable
+                                onPress={this.handleSocialShare}>
+                                <View style={styles.shareStyle}>
+                                    <Icon name="share" size={styleVariables.iconSize}
+                                          color={styleVariables.primaryColor}/>
+                                    <Text style={styles.rowItemText}>Share</Text>
+                                </View>
+                            </Touchable>
                         </View>
 
                         {!this.props.showLoading && this.props.merchant &&
@@ -109,7 +109,7 @@ class MerchantDetail extends Component {
 
                         {(this.props.coupons.length > 0) &&
                         <View style={styles.couponSection}>
-                            <Text style={{fontWeight: "bold", paddingHorizontal: 20}}>Offers </Text>
+                            <Text style={styles.couponTitleTitle}>Popular Offers </Text>
                             <CouponList
                                 {...this.props}
                                 list={this.props.coupons}
@@ -119,48 +119,44 @@ class MerchantDetail extends Component {
                         </View>
                         }
 
-                        <View style={{flex: 1}}>
+                        <View style={commonStyles.buttonStyle}>
                             <Button
                                 loading={this.props.showLoading}
                                 backgroundColor={styleVariables.dealColor}
                                 iconRight={{name: "shopping-cart"}}
-                                onPress={() => this.handleOutlink(this.props.merchant)}
-                                textStyle={{fontSize: styleVariables.mainTextFontSize}}
-                                containerViewStyle={{marginVertical: 15, alignContent: "stretch"}}
+                                onPress={this.handleOutlink}
+                                textStyle={commonStyles.buttonTextStyle}
+                                containerViewStyle={commonStyles.buttonViewStyle}
                                 title={"Visit " + this.tempData.title}/>
                         </View>
-
-
                     </View>
                 </ScrollView>
-                <TabBar {...this.props}/>
-            </View>
-
-
+            </BaseLayout>
         );
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(ActionCreators, dispatch);
-}
-
 function mapStateTopProps(state) {
     return {
-        merchant: _.isEmpty(state.merchantDetails) ? {} : state.merchantDetails,
+        merchant: state.merchantDetails,
         coupons: _.isEmpty(state.merchantCoupons) ? [] : Object.values(state.merchantCoupons),
         showLoading: state.refreshStatus,
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(MerchantDetail);
+MerchantDetail.propTypes = {
+    merchant: PropTypes.object,
+    showLoading: PropTypes.bool,
+    navigation: PropTypes.object,
+    getCouponsByMerchantId: PropTypes.func,
+    coupons: PropTypes.array
+};
+
+export default withConnect(withIndicator(MerchantDetail), mapStateTopProps);
+
 
 const styles = StyleSheet.create(
     {
-        container: {
-            flex: 1,
-            backgroundColor: styleVariables.backgroundColor
-        },
 
         body: {
             flex: 1,
@@ -180,8 +176,9 @@ const styles = StyleSheet.create(
             borderBottomWidth: 1,
             borderColor: styleVariables.borderColor
         },
+
         rowItemText: {
-            marginTop: 5,
+            marginTop: 2,
             marginLeft: 10
         },
 
@@ -190,8 +187,9 @@ const styles = StyleSheet.create(
             height: 90,
             borderWidth: 1,
             marginRight: 10,
-            borderColor: "#cccccc",
+            borderColor: styleVariables.borderColor,
         },
+
         detailsWrapper: {
             flexDirection: "row",
             alignContent: "center",
@@ -204,13 +202,23 @@ const styles = StyleSheet.create(
             alignItems: "flex-start",
         },
 
-        offerTitle: {
-            fontSize: 14,
+        mainTitle: {
+            fontSize: styleVariables.mainTextFontSize,
         },
 
-        merchantTitle: {
-            fontSize: 12,
+        subTitle: {
+            fontSize: styleVariables.mainTextFontSize,
             marginTop: 5,
+        },
+        ratingStyle: {
+            paddingVertical: 10
+        },
+        couponTitleTitle: {
+            fontWeight: "bold",
+            paddingHorizontal: 20
+        },
+        shareStyle: {
+            flexDirection: "row"
         }
     }
 );

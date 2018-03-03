@@ -1,4 +1,3 @@
-import React from "react";
 import {StyleSheet} from "react-native";
 
 export const styleVariables = {
@@ -15,15 +14,22 @@ export const styleVariables = {
     saleColor: "#ec407a",
     deliveryColor: "#6e8cd7",
     infoDetailColor: "#455a64",
+    clearIconColor: "#86939c",
+    rowColor: "#dddddd",
+    tabColor: "#3c3c3c",
     mainTextFontSize: 14,
     subtitleFontSize: 12,
+    menuIconSize: 25,
     infoTextFontSize: 11,
+    loadingIconSize: 40,
+    transparent: "rgba(0,0,0,0)",
     hitSlop: {
         top: 5,
         right: 5,
         left: 5,
         bottom: 5,
     },
+    iconSize: 20
 };
 
 
@@ -63,22 +69,23 @@ const commonStyles = StyleSheet.create({
     },
     divider: {
         borderTopWidth: 0.5,
-        borderColor: "#3e3e3e",
+        borderColor: styleVariables.borderColor,
         height: 2
     },
+
     row: {
         flex: 1,
         padding: 42,
         borderWidth: 1,
         alignSelf: "center",
         fontSize: 24,
-        borderColor: "#DDDDDD"
+        borderColor: styleVariables.rowColor
     },
 
     sectionDivider: {
         alignItems: "center",
         padding: 8,
-        backgroundColor: "#EEEEEE"
+        backgroundColor: styleVariables.borderColor
     },
 
     listContainerStyle: {
@@ -87,7 +94,17 @@ const commonStyles = StyleSheet.create({
         paddingHorizontal: 10,
         borderTopWidth: 0,
         borderBottomWidth: 0,
-    }
+    },
+    buttonStyle: {
+        flex: 1
+    },
+    buttonViewStyle: {
+        marginVertical: 10,
+        alignContent: "stretch"
+    },
+    buttonTextStyle: {
+        fontSize: styleVariables.mainTextFontSize
+    },
 });
 
 export default commonStyles;

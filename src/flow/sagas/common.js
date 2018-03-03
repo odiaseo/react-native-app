@@ -1,23 +1,41 @@
 import * as types from "../types";
 import apiHelper from "../../common/apiHelper";
-import {setRefreshStatus} from "./coupon";
 import * as selectors from "./selectors";
 import {call, put, takeEvery, takeLatest, select} from "redux-saga/effects";
+import store from "../../store";
+import _ from "lodash";
 
-function* getAccessToken() {
+export function* checkTokenExists() {
     try {
-        const resp = yield call(apiHelper.requestAccessToken);
-        yield put({type: types.SET_ACCESS_TOKEN, result: resp});
+        yield call(requestAccessToken);
+        return yield select(selectors.getAccessToken);
+
+    } catch (e) {
+        yield put({type: types.API_FETCH_FAILED, message: e.message});
+        return {};
+    }
+}
+
+function* requestAccessToken() {
+    try {
+        if (_.isEmpty(store.getState().accessToken)) {
+            const resp = yield call(apiHelper.requestAccessToken);
+            yield put({type: types.SET_ACCESS_TOKEN, result: resp});
+        }
     } catch (e) {
         yield put({type: types.API_FETCH_FAILED, message: e.message});
     }
 }
 
-function* getSliders() {
+export function* getSliders() {
     try {
-        const token = yield select(selectors.getAccessToken);
-        const resp = yield call(apiHelper.getCarouselSlides, token);
-        yield put({type: types.SET_FOUND_SLIDES, result: resp});
+        const slider = yield select(selectors.getSliders);
+
+        if (_.isEmpty(slider)) {
+            const token = yield call(checkTokenExists);
+            const resp = yield call(apiHelper.getCarouselSlides, token);
+            yield put({type: types.SET_FOUND_SLIDES, result: resp});
+        }
     } catch (e) {
         yield put({type: types.API_FETCH_FAILED, message: e.message});
     }
@@ -25,7 +43,7 @@ function* getSliders() {
 
 const commonWatcherSagas = [
     takeEvery(types.GET_SLIDERS, getSliders),
-    takeLatest(types.GET_ACCESS_TOKEN, getAccessToken)
+    takeLatest(types.GET_ACCESS_TOKEN, requestAccessToken)
 ];
 
 export default commonWatcherSagas;

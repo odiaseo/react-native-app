@@ -1,17 +1,36 @@
-import React, {Component} from "react";
-import {View, Text} from "react-native";
+import React from "react";
+import {View, Text, StyleSheet} from "react-native";
+import PropTypes from "prop-types";
 
-export default class AboutSection extends Component {
-    render() {
-        if (!this.props.description) {
-            return null;
-        }
+const AboutSection = ({title, description}) => {
 
-        return (
-            <View style={{paddingHorizontal: 20, marginTop: 20}}>
-                <Text style={{fontWeight: "bold"}}>About {this.props.title}</Text>
-                <Text>{this.props.description}</Text>
-            </View>
-        );
+    if (!description) {
+        return null;
     }
-}
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>About {title}</Text>
+            <Text>{description}</Text>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create(
+    {
+        container: {
+            paddingHorizontal: 20,
+            marginTop: 20
+        },
+        title: {
+            fontWeight: "bold"
+        }
+    }
+);
+
+AboutSection.propTypes = {
+    title: PropTypes.string,
+    description: PropTypes.string,
+};
+
+export default AboutSection;

@@ -1,15 +1,13 @@
-import React from "react";
 import options from "../config/options";
-import moment from "moment";
 import * as types from "../flow/types";
 import axios from "axios";
 import _ from "lodash";
-
-const querystring = require("querystring");
+import {toQueryString} from "./helperFuntions";
+import sliders from "../data/sliders";
 
 const call = function (endPoint, token = "", body = null, method = "GET") {
 
-    let headers = {
+    const headers = {
         Accept: "application/json",
         "Content-Type": "application/json"
     };
@@ -26,7 +24,7 @@ const call = function (endPoint, token = "", body = null, method = "GET") {
 
     const params = {
         mode: "no-cors",
-        method: method,
+        method,
         url: endPoint
     };
 
@@ -35,9 +33,7 @@ const call = function (endPoint, token = "", body = null, method = "GET") {
     }
 
     return instance(params)
-        .then((responseJson) => {
-            return responseJson.data;
-        });
+        .then((responseJson) => responseJson.data);
 };
 
 const ApiHelper = {
@@ -77,16 +73,13 @@ const ApiHelper = {
     findMerchantsByCategory(accessToken, categoryId, page = 1, limit = 10) {
         const params = {
             unique_field: "title",
-            //fields: ["id", "title", "logo", "is_featured", "deep_link"].join(","),
-            sort: ["-display_order", "-popularity"].join(','),
+            sort: ["-display_order", "-popularity"].join(","),
             filters: [`category_id=${categoryId}`, "has_logo=true", "is_active=true"].join(","),
-            page: page,
+            page,
             per_page: limit
         };
-
-        const queryString = querystring.stringify(params);
+        const queryString = toQueryString(params);
         const endPoint = `/merchant?${queryString}`;
-        console.log(endPoint);
 
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson.data);
@@ -102,17 +95,15 @@ const ApiHelper = {
             per_page: limit
         };
 
-        const queryString = querystring.stringify(params);
+        const queryString = toQueryString(params);
         const endPoint = `/type-ahead/merchant?${queryString}`;
-
-        console.log(endPoint);
 
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
     },
 
     getCoupons(accessToken, storeType, page = 1, limit = 20) {
-        let endPoint;
+        let endPoint = "";
         let params = {};
 
         switch (storeType) {
@@ -147,8 +138,8 @@ const ApiHelper = {
                 break;
         }
 
-        let filters = Object.assign({}, params, {page: page, per_page: limit});
-        const queryString = querystring.stringify(filters);
+        const filters = Object.assign({}, params, {page, per_page: limit});
+        const queryString = toQueryString(filters);
 
         endPoint = `/voucher?${queryString}`;
 
@@ -157,24 +148,27 @@ const ApiHelper = {
     },
 
     getMerchantCoupons(accessToken, merchantId, page = 1, limit = 10) {
-        let filters = {
+        const filters = {
             filters: `is_expired=0,merchant_id=${merchantId}`,
-            page: page,
+            page,
             sort: "-popularity",
             per_page: limit
         };
 
-        const queryString = querystring.stringify(filters);
+        const queryString = toQueryString(filters);
 
         return call(`/voucher?${queryString}`, accessToken)
             .then((responseJson) => responseJson);
     },
 
-    getCarouselSlides(accessToken) {
+    getCarouselSlides() {
+        return {data: sliders};
+        /*
         const today = moment().format("YYYY-MM-DD");
         const endPoint = `/slide?filters=is_active=true,end_at=${today}>`;
         return call(endPoint, accessToken)
             .then((responseJson) => responseJson);
+            */
     },
 
     searchCoupons(accessToken, searchTerm, page = 1, limit = 20) {
@@ -190,26 +184,25 @@ const ApiHelper = {
             filters: ["has_logo=true", "is_active=true"].join(","),
             sort: "-display_order,-is_profitable,-popularity",
             group_id: categoryList.join(","),
-            page: page,
+            page,
             per_page: limit
         };
 
-        const queryString = querystring.stringify(params);
+        const queryString = toQueryString(params);
 
         const endPoint = `/merchant/group/category_id?${queryString}`;
 
         return call(endPoint, accessToken)
-            .then((merchants) => {
-                return ApiHelper.groupByCategory(merchants.data);
-            }).catch((error) => {
+            .then((merchants) => ApiHelper.groupByCategory(merchants.data))
+            .catch((error) => {
                 console.error(error);
             });
     },
 
     groupByCategory(merchantList) {
-        let sections = {};
+        const sections = {};
 
-        _.forEach(merchantList, function (merchants) {
+        _.forEach(merchantList, (merchants) => {
             const firstMerchant = merchants[0];
             const categoryId = firstMerchant.category.id;
 

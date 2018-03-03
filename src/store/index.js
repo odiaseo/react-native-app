@@ -1,4 +1,3 @@
-import React from "react";
 import {createStore, applyMiddleware} from "redux";
 import {createLogger} from "redux-logger";
 import reducer from "../flow/reducers";
@@ -8,6 +7,7 @@ import {AsyncStorage} from "react-native";
 import hardSet from "redux-persist/lib/stateReconciler/hardSet";
 import {composeWithDevTools} from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
+import reduxMulti from "redux-multi";
 
 const loggerMiddleware = createLogger({predicate: () => __DEV__});
 const sagaMiddleware = createSagaMiddleware();
@@ -18,6 +18,7 @@ const persistConfig = {
     storage: AsyncStorage,
     stateReconciler: hardSet,
     whitelist: [
+        "sliders",
         "accessToken",
         "carouselMerchants",
         "categories"
@@ -29,6 +30,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 function configureStore(initialState) {
     const enhancer = composeWithDevTools(
         applyMiddleware(
+            reduxMulti,
             sagaMiddleware,
             loggerMiddleware
         )

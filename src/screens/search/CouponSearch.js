@@ -1,46 +1,22 @@
-import React, {Component} from "react";
-import {StyleSheet, View} from "react-native";
-import TopBar from "../../components/TopBar";
-import TabBar from "../../components/navigation/TabBar";
-import {bindActionCreators} from "redux";
-import {ActionCreators} from "../../flow/actions/index";
-import {connect} from "react-redux";
+import React from "react";
 import _ from "lodash";
 import CouponList from "../../components/coupon/CouponList";
-import {styleVariables} from "../../common/styles";
 import {SEARCH_COUPON} from "../../constants";
+import withConnect, {withIndicator} from "../../config/hoc";
+import BaseLayout from "../../components/layout/BaseLayout";
+import PropTypes from "prop-types";
 
-class CouponSearch extends Component {
+const CouponSearch = (props) => (
+    <BaseLayout searchType={SEARCH_COUPON} {...props}>
+        {props.children}
+        <CouponList {...props} list={props.searchedCoupons}/>
+    </BaseLayout>
+);
 
-    static navigationOptions = {
-        title: "COUPON SEARCH",
-    };
-
-    handleRowClick(coupon) {
-        this.props.navigation.navigate("CouponDetail", {coupon});
-    }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <TopBar {...this.props} searchType={SEARCH_COUPON}/>
-
-                <View style={styles.body}>
-                    <CouponList
-                        {...this.props} list={this.props.searchedCoupons}
-                        onClick={this.handleRowClick.bind(this)}
-                    />
-                </View>
-
-                <TabBar {...this.props}/>
-            </View>
-        );
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(ActionCreators, dispatch);
-}
+CouponSearch.propTypes = {
+    searchedCoupons: PropTypes.array,
+    children: PropTypes.node
+};
 
 function mapStateTopProps(state) {
     return {
@@ -50,16 +26,4 @@ function mapStateTopProps(state) {
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(CouponSearch);
-
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-            backgroundColor: styleVariables.backgroundColor
-        },
-        body: {
-            flex: 1
-        }
-    }
-);
+export default withConnect(withIndicator(CouponSearch), mapStateTopProps);

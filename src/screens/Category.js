@@ -1,71 +1,32 @@
 import React, {Component} from "react";
-import {StyleSheet, View, ScrollView} from "react-native";
-import TabBar from "../components/navigation/TabBar";
-import {bindActionCreators} from "redux";
-import {ActionCreators} from "../flow/actions";
-import {connect} from "react-redux";
-import SiteActivityIndicator from "../components/SiteActivityIndicator";
-import HeaderRight from "../components/HeaderRight";
-import {List, ListItem} from "react-native-elements";
-import commonStyles, {styleVariables} from "../common/styles";
-import * as util from "../common/helperFuntions";
+import {ScrollView} from "react-native";
+import {List} from "react-native-elements";
+import commonStyles from "../common/styles";
 import _ from "lodash";
+import withConnect, {withIndicator} from "../config/hoc";
+import BaseLayout from "../components/layout/BaseLayout";
+import PropTypes from "prop-types";
+import CategoryListItem from "../components/category/CategoryListItem";
 
 class Category extends Component {
 
-    static navigationOptions = {
-        title: "CATEGORIES",
-        headerRight: (<HeaderRight/>),
-    };
-
     componentDidMount() {
-        this.props.setActivityStatus(true);
         this.props.getCategories();
     }
 
-    renderResultPage() {
-        if (this.props.showLoading) {
-            return (
-                <SiteActivityIndicator/>
-            );
-        }
-
-        const list = this.props.categories;
-
-        return (
-            <ScrollView>
-                <List containerStyle={commonStyles.listContainerStyle}>
-                    {
-                        list.map((category, index) => (
-                            <ListItem
-                                leftIcon={{name: util.getIconName(category.icon_class_name), type: "font-awesome"}}
-                                key={index}
-                                onPress={() => this.props.navigation.navigate("CategoryMerchant", {category})}
-                                subtitle={util.renderOfferCount(category.stats.voucher_count)}
-                                titleStyle={{fontSize: styleVariables.mainTextFontSize}}
-                                subtitleStyle={{fontSize: styleVariables.infoTextFontSize, fontWeight: "normal"}}
-                                containerStyle={{borderBottomColor: styleVariables.borderColor, marginTop: 0}}
-                                title={category.title}
-                            />
-                        ))
-                    }
-                </List>
-            </ScrollView>
-        );
-    }
-
     render() {
+        const list = this.props.categories.filter((cat) => cat.id !== 1);
         return (
-            <View style={styles.container}>
-                {this.renderResultPage()}
-                <TabBar {...this.props}/>
-            </View>
+            <BaseLayout {...this.props} showSearch={false}>
+                {this.props.children}
+                <ScrollView>
+                    <List containerStyle={commonStyles.listContainerStyle}>
+                        {list.map((cat, index) => <CategoryListItem key={index} category={cat} {...this.props}/>)}
+                    </List>
+                </ScrollView>
+            </BaseLayout>
         );
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(ActionCreators, dispatch);
 }
 
 function mapStateTopProps(state) {
@@ -75,21 +36,11 @@ function mapStateTopProps(state) {
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(Category);
+Category.propTypes = {
+    categories: PropTypes.array,
+    navigation: PropTypes.object,
+    children: PropTypes.node,
+    getCategories: PropTypes.func,
+};
 
-const styles = StyleSheet.create(
-    {
-        container: {
-            flex: 1,
-            backgroundColor: "#ffffff"
-        },
-        body: {
-            flex: 1
-        },
-        divider: {
-            borderTopWidth: 0.5,
-            borderColor: "#3e3e3e",
-            height: 2
-        }
-    }
-);
+export default withConnect(withIndicator(Category), mapStateTopProps);

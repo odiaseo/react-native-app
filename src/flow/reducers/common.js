@@ -6,6 +6,10 @@ export const errorMessage = createReducer("", {
 
     [types.API_FETCH_FAILED](state, action) {
         return action.message;
+    },
+
+    [types.SET_REFRESH_STATUS]() {
+        return false;
     }
 });
 
@@ -30,17 +34,14 @@ export const sliders = createReducer([], {
     [types.SET_FOUND_SLIDES](state, action) {
 
         if (action.result.data) {
-            const items = {};
+            const items = [];
 
             action.result.data.forEach((slide) => {
-
-                const url = options.sliderImageDomain + slide.background_image;
-
-                items[slide.id] = {
+                items.push({
                     id: slide.id,
                     title: slide.title,
-                    imagePath: url,
-                };
+                    imagePath: options.sliderImageDomain + slide.background_image,
+                });
             });
 
             return items;

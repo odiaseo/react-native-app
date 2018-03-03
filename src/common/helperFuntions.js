@@ -32,13 +32,8 @@ export function renderOfferCount(count, wrap = false) {
     return value;
 }
 
-export function getIconName(text) {
+export function getIconName() {
     return "shopping-cart";
-
-    let classname = text.split(" ").reverse()[0];
-    classname = classname.replace("ti-", "").replace("fa-", "");
-
-    return classname || "shopping-cart";
 }
 
 export function renderOfferType(coupon) {
@@ -82,4 +77,8 @@ export const storeCoupons = function (state, action) {
     });
 
     return items;
+};
+
+export const toQueryString = function (obj) {
+    return _.map(obj, (v, k) => encodeURIComponent(k) + "=" + encodeURIComponent(v)).join("&");
 };

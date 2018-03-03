@@ -2,13 +2,14 @@ import * as types from "../types";
 import apiHelper from "../../common/apiHelper";
 import * as selectors from "./selectors";
 import {call, put, takeEvery, select} from "redux-saga/effects";
+import {checkTokenExists} from "./common";
 
 export function* getCategories() {
     try {
         const categories = yield select(selectors.getCategories);
 
         if (categories.length === 0) {
-            const token = yield select(selectors.getAccessToken);
+            const token = yield call(checkTokenExists);
             const resp = yield call(apiHelper.listCategories, token);
             yield put({type: types.SET_FOUND_CATEGORIES, result: resp});
         }
@@ -21,7 +22,7 @@ export function* getCategories() {
 
 
 export function* requestCategories() {
-    const token = yield select(selectors.getAccessToken);
+    const token = yield call(checkTokenExists);
     const categories = yield call(apiHelper.listCategories, token, 1);
     yield put({type: types.SET_MAIN_CATEGORIES, result: categories});
 }

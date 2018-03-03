@@ -1,28 +1,22 @@
 import React, {Component} from "react";
-import {StyleSheet, Image, Linking, View, ScrollView} from "react-native";
+import {StyleSheet, Image, View, ScrollView} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import TabBar from "../components/navigation/TabBar";
-import {styleVariables} from "../common/styles";
+import commonStyles, {styleVariables} from "../common/styles";
 import {Text, Button, Rating} from "react-native-elements";
-import HeaderRight from "../components/HeaderRight";
-import * as util from "../common/helperFuntions";
 import AboutSection from "../components/AboutSection";
 import Touchable from "react-native-platform-touchable";
+import PropTypes from "prop-types";
+import {openExternalLink, renderOfferCount, renderExpiryDate} from "../common/helperFuntions";
 
 export default class CouponDetail extends Component {
 
-    static navigationOptions = {
-        title: "DEAL",
-        headerRight: (<HeaderRight/>)
-    };
+    handleOpenExternalLink = () => openExternalLink(this.props.navigation.getParam("coupon").outlink);
 
-    openExternalLink() {
-        Linking.openURL(this.coupon.outlink)
-            .catch(err => console.error("An error occurred", err));
-    }
+    handleMerchantDetailNavigation = () =>  this.props.navigation.navigate("MerchantDetail", {tempData: this.props.navigation.getParam("coupon").merchant});
 
     render() {
-        this.coupon = this.props.navigation.state.params.coupon;
+        const coupon = this.props.navigation.getParam("coupon");
 
         return (
 
@@ -30,59 +24,57 @@ export default class CouponDetail extends Component {
                 <ScrollView>
                     <View style={styles.body}>
                         <View style={styles.detailsWrapper}>
-                            <Image source={{uri: this.coupon.merchant.logo}} style={styles.image}/>
+                            <Image source={{uri: coupon.merchant.logo}} style={styles.image}/>
                             <Touchable
                                 style={styles.details}
                                 hitSlop={styleVariables.hitSlop}
-                                onPress={() => this.props.navigation.navigate("MerchantDetail", {tempData: this.coupon.merchant})}>
+                                onPress={this.handleMerchantDetailNavigation}>
                                 <View>
-                                    <Text style={styles.offerTitle}>{this.coupon.title}</Text>
-                                    <Text style={styles.merchantTitle}>
+                                    <Text style={styles.mainTitle}>{coupon.title}</Text>
+                                    <Text style={styles.subTitle}>
                                         {
-                                            this.coupon.merchant.title + " " + util.renderOfferCount(this.coupon.merchant.stats.voucher_count, true)
+                                            coupon.merchant.title + " " + renderOfferCount(coupon.merchant.stats.voucher_count, true)
                                         }
                                     </Text>
                                     <Rating
                                         type="star"
                                         fractions={1}
-                                        startingValue={this.coupon.merchant.stats.popularity}
+                                        startingValue={coupon.merchant.stats.popularity}
                                         readonly
                                         imageSize={13}
-                                        style={{paddingVertical: 10}}
+                                        style={styles.ratingStyle}
                                     />
                                 </View>
                             </Touchable>
                         </View>
 
-                        <View style={[styles.rowItems, {
-                            backgroundColor: styleVariables.lightBackgroundColor,
-                            paddingVertical: 15
-                        }]}>
+                        <View style={styles.expiryRow}>
                             <Icon name="timer" size={24} color={styleVariables.deliveryColor}/>
-                            <Text style={styles.rowItemText}>{util.renderExpiryDate(this.coupon)}</Text>
+                            <Text style={styles.rowItemText}>{renderExpiryDate(coupon)}</Text>
                         </View>
 
                         <View style={styles.rowItems}>
                             <Icon name="monetization-on" size={24} color={styleVariables.primaryColor}/>
-                            <Text style={styles.rowItemText}>{this.coupon.offer_type.title}</Text>
+                            <Text style={styles.rowItemText}>{coupon.offer_type.title}</Text>
                         </View>
 
                         <View style={styles.rowItems}>
                             <Icon name="folder" size={24} color={styleVariables.couponColor}/>
-                            <Text style={styles.rowItemText}>{this.coupon.category.title}</Text>
+                            <Text style={styles.rowItemText}>{coupon.category.title}</Text>
                         </View>
 
                         <AboutSection
-                            title={this.coupon.merchant.title}
-                            description={this.coupon.merchant.description}
+                            title={coupon.merchant.title}
+                            description={coupon.merchant.description}
                         />
 
-                        <View style={{flex: 1}}>
+                        <View style={commonStyles.buttonStyle}>
                             <Button
                                 backgroundColor={styleVariables.dealColor}
                                 iconRight={{name: "shopping-cart"}}
-                                onPress={this.openExternalLink.bind(this)}
-                                containerViewStyle={{marginTop: 60, alignContent: "stretch"}}
+                                onPress={this.handleOpenExternalLink}
+                                textStyle={commonStyles.buttonTextStyle}
+                                containerViewStyle={commonStyles.buttonViewStyle}
                                 title='Get Deal'/>
                         </View>
                     </View>
@@ -92,6 +84,12 @@ export default class CouponDetail extends Component {
         );
     }
 }
+
+CouponDetail.propTypes = {
+    coupon: PropTypes.object,
+    showLoading: PropTypes.bool,
+    navigation: PropTypes.object,
+};
 
 const styles = StyleSheet.create(
     {
@@ -123,7 +121,7 @@ const styles = StyleSheet.create(
             height: 90,
             borderWidth: 1,
             marginRight: 10,
-            borderColor: "#cccccc",
+            borderColor: styleVariables.borderColor,
         },
         detailsWrapper: {
             flexDirection: "row",
@@ -137,13 +135,26 @@ const styles = StyleSheet.create(
             alignItems: "flex-start",
         },
 
-        offerTitle: {
+        mainTitle: {
             fontSize: 14,
         },
 
-        merchantTitle: {
+        subTitle: {
             fontSize: 12,
             marginTop: 5,
+        },
+
+        ratingStyle: {
+            paddingVertical: 10
+        },
+        expiryRow: {
+            flexDirection: "row",
+            alignContent: "center",
+            paddingHorizontal: 20,
+            borderBottomWidth: 1,
+            borderColor: styleVariables.borderColor,
+            backgroundColor: styleVariables.lightBackgroundColor,
+            paddingVertical: 15
         }
     }
 );

@@ -2,11 +2,10 @@ import React, {Component} from "react";
 import {StyleSheet, View, Keyboard} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {SearchBar} from "react-native-elements";
-import {ActionCreators} from "../flow/actions/index";
-import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
 import Touchable from "react-native-platform-touchable";
-import {styleVariables} from "../common/styles";
+import {styleVariables} from "../../common/styles";
+import withConnect from "../../config/hoc";
+import PropTypes from "prop-types";
 
 class TopBar extends Component {
 
@@ -14,15 +13,25 @@ class TopBar extends Component {
 
     constructor(props) {
         super(props);
-        this.onChangeTextDelayed = this.onChangeTextDelayed.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.setItemRef = this.setItemRef.bind(this);
+        this.handleDisplayDrawerStack = this.handleDisplayDrawerStack.bind(this);
     }
 
-    onChangeTextDelayed(searchTerm, page = 1) {
+    handleTextChange(searchTerm) {
         if (searchTerm.length > 2) {
             this.props.setActivityStatus(true);
-            this.props.searchByKeyword(this.props.searchType, searchTerm, page);
+            this.props.searchByKeyword(this.props.searchType, searchTerm, 1);
             Keyboard.dismiss();
         }
+    }
+
+    handleDisplayDrawerStack() {
+        this.props.navigation.navigate("DrawerToggle");
+    }
+
+    setItemRef(ref) {
+        this.searchRef = ref;
     }
 
     componentDidMount() {
@@ -34,31 +43,30 @@ class TopBar extends Component {
             <View style={styles.navBar}>
                 <SearchBar
                     round
-                    ref={(search) => {
-                        this.searchRef = search;
-                    }}
+                    ref={this.setItemRef}
                     showLoadingIcon={this.props.showLoading}
                     placeholder='Enter keyword ...'
                     inputStyle={styles.searchBar}
                     containerStyle={styles.searchContainer}
                     autoCapitalize={"none"}
-                    onChangeText={(text) => this.onChangeTextDelayed(text)}
-                    clearIcon={{color: "#86939c"}}
+                    onChangeText={this.handleTextChange}
+                    clearIcon={{color: styleVariables.clearIconColor}}
                 />
                 <View>
                     <Touchable
                         hitSlop={styleVariables.hitSlop}
-                        onPress={() => this.props.navigation.navigate("DrawerToggle")}>
-                        <Icon style={styles.navItem} name="menu" size={25} color="#FFFFFF"/>
+                        onPress={this.handleDisplayDrawerStack}>
+                        <Icon
+                            style={styles.navItem}
+                            name="menu"
+                            size={styleVariables.menuIconSize}
+                            color={styleVariables.backgroundColor}
+                        />
                     </Touchable>
                 </View>
             </View>
         );
     }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators(ActionCreators, dispatch);
 }
 
 function mapStateTopProps(state) {
@@ -68,39 +76,37 @@ function mapStateTopProps(state) {
     };
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(TopBar);
+export default withConnect(TopBar, mapStateTopProps);
 
+TopBar.propTypes = {
+    navigation: PropTypes.object,
+    searchByKeyword: PropTypes.func,
+    setActivityStatus: PropTypes.func,
+    searchType: PropTypes.string,
+    showLoading: PropTypes.bool
+};
 
 const styles = StyleSheet.create(
     {
-        container: {},
         navBar: {
             height: 55,
-            backgroundColor: "#25282e",
+            backgroundColor: styleVariables.headerBackgroundColor,
             paddingHorizontal: 15,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between"
         },
-        logo: {
-            height: 22
-        },
-        rightNav: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignContent: "center"
-        },
         navItem: {
             marginLeft: 5
         },
         searchBar: {
-            borderColor: "#25282e",
-            fontSize: 14
+            borderColor: styleVariables.headerBackgroundColor,
+            fontSize: styleVariables.mainTextFontSize
         },
         searchContainer: {
             marginHorizontal: 5,
             flex: 1,
-            backgroundColor: "#25282e",
+            backgroundColor: styleVariables.headerBackgroundColor,
             marginTop: 5
         }
     }
